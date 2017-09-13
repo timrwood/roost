@@ -1,0 +1,11 @@
+tile.roost.breeder.name=Chicken Breeder
+tile.roost.collector.name=Roost Collector
+tile.roost.roost.name=Roost
+
+container.roost.breeder=Chicken Breeder
+container.roost.collector=Roost Collector
+container.roost.roost=Roost
+
+item.roost.catcher.name=Chicken Catcher
+
+itemGroup.roost=Roost

@@ -1,0 +1,16 @@
+[
+{
+  "modid": "roost",
+  "name": "Roost",
+  "description": "A place for chickens to rest",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Tim Wood"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

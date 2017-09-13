@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "roost:blocks/plain_face",
+    "down": "roost:blocks/plain_face",
+    "up": "roost:blocks/plain_face",
+    "north": "roost:blocks/slat_side",
+    "east": "roost:blocks/slat_side",
+    "south": "roost:blocks/slat_side",
+    "west": "roost:blocks/slat_side"
+  }
+}

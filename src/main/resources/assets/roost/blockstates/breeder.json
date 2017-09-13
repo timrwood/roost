@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "normal": { "model": "roost:breeder" },
+    "is_breeding=true": { "model": "roost:breeder_privacy" },
+    "is_breeding=false": { "model": "roost:breeder" }
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "display": {
+    "firstperson_righthand": {
+      "rotation": [0, 135, 0],
+      "translation": [0, 0, 0],
+      "scale": [0.4, 0.4, 0.4]
+    }
+  },
+  "textures": {
+    "particle": "roost:blocks/plain_face",
+    "wood": "roost:blocks/plain_face",
+    "front": "roost:blocks/curtain_side",
+    "hay_side": "roost:blocks/hay_side",
+    "hay": "roost:blocks/hay_floor"
+  },
+  "elements": [
+    {
+      "name": "West",
+      "from": [0, 3, 0],
+      "to": [3, 13, 16],
+      "faces": {
+        "north": { "texture": "#front", "uv": [13, 3, 16, 13] },
+        "east": { "texture": "#hay_side", "uv": [0, 3, 16, 13] },
+        "south": { "texture": "#wood", "uv": [0, 3, 3, 13] },
+        "west": { "texture": "#wood", "uv": [0, 3, 16, 13] }
+      }
+    },
+    {
+      "name": "South",
+      "from": [3, 3, 13],
+      "to": [13, 13, 16],
+      "faces": {
+        "north": { "texture": "#hay_side", "uv": [3, 3, 13, 13] },
+        "south": { "texture": "#wood", "uv": [3, 3, 13, 13] }
+      }
+    },
+    {
+      "name": "East",
+      "from": [13, 3, 0],
+      "to": [16, 13, 16],
+      "faces": {
+        "north": { "texture": "#front", "uv": [0, 3, 3, 13] },
+        "east": { "texture": "#wood", "uv": [0, 3, 16, 13] },
+        "south": { "texture": "#wood", "uv": [14, 3, 16, 13] },
+        "west": { "texture": "#hay_side", "uv": [0, 3, 16, 13] }
+      }
+    },
+    {
+      "name": "Up",
+      "from": [0, 13, 0],
+      "to": [16, 16, 16],
+      "faces": {
+        "north": { "texture": "#front", "uv": [0, 0, 16, 3] },
+        "east": { "texture": "#wood", "uv": [0, 0, 16, 3] },
+        "south": { "texture": "#wood", "uv": [0, 0, 16, 3] },
+        "west": { "texture": "#wood", "uv": [0, 0, 16, 3] },
+        "up": { "texture": "#wood", "uv": [0, 0, 16, 16] },
+        "down": { "texture": "#wood", "uv": [0, 0, 16, 16] }
+      }
+    },
+    {
+      "name": "Down",
+      "from": [0, 0, 0],
+      "to": [16, 3, 16],
+      "faces": {
+        "north": { "texture": "#front", "uv": [0, 13, 16, 16] },
+        "east": { "texture": "#wood", "uv": [0, 13, 16, 16] },
+        "south": { "texture": "#wood", "uv": [0, 13, 16, 16] },
+        "west": { "texture": "#wood", "uv": [0, 13, 16, 16] },
+        "up": { "texture": "#hay", "uv": [0, 0, 16, 16] },
+        "down": { "texture": "#wood", "uv": [0, 0, 16, 16] }
+      }
+    }
+  ]
+}
