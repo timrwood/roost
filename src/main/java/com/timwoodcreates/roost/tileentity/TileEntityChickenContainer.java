@@ -33,7 +33,7 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 
 	@Override
 	public void update() {
-		if (!worldObj.isRemote) {
+		if (!getWorld().isRemote) {
 			updateChickenInfoIfNeeded();
 			updateTimerIfNeeded();
 			spawnChickenDropIfNeeded();
@@ -234,7 +234,7 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		if (worldObj.getTileEntity(pos) != this) {
+		if (getWorld().getTileEntity(pos) != this) {
 			return false;
 		} else {
 			return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;

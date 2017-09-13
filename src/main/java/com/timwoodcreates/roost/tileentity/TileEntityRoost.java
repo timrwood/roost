@@ -84,11 +84,11 @@ public class TileEntityRoost extends TileEntityChickenContainer {
 	}
 
 	private void playPutChickenInSound() {
-		worldObj.playSound(null, pos, SoundEvents.ENTITY_ITEMFRAME_ADD_ITEM, SoundCategory.BLOCKS, 1.0F, 1.0F);
+		getWorld().playSound(null, pos, SoundEvents.ENTITY_ITEMFRAME_ADD_ITEM, SoundCategory.BLOCKS, 1.0F, 1.0F);
 	}
 
 	private void playPullChickenOutSound() {
-		worldObj.playSound(null, pos, SoundEvents.ENTITY_ITEMFRAME_REMOVE_ITEM, SoundCategory.BLOCKS, 1.0F, 1.0F);
+		getWorld().playSound(null, pos, SoundEvents.ENTITY_ITEMFRAME_REMOVE_ITEM, SoundCategory.BLOCKS, 1.0F, 1.0F);
 	}
 
 	public void addInfoToTooltip(List<String> tooltip, NBTTagCompound tag) {
@@ -109,8 +109,8 @@ public class TileEntityRoost extends TileEntityChickenContainer {
 	}
 
 	private void notifyBlockUpdate() {
-		final IBlockState state = worldObj.getBlockState(pos);
-		worldObj.notifyBlockUpdate(pos, state, state, 2);
+		final IBlockState state = getWorld().getBlockState(pos);
+		getWorld().notifyBlockUpdate(pos, state, state, 2);
 	}
 
 	@Override

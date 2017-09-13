@@ -23,7 +23,7 @@ public class TileEntityCollector extends TileEntity implements ISidedInventory, 
 
 	@Override
 	public void update() {
-		if (!worldObj.isRemote) {
+		if (!getWorld().isRemote) {
 			updateSearchOffset();
 			gatherItems();
 		}
@@ -42,10 +42,10 @@ public class TileEntityCollector extends TileEntity implements ISidedInventory, 
 	}
 
 	private void gatherItemAtPos(BlockPos pos) {
-		TileEntity tileEntity = worldObj.getTileEntity(pos);
+		TileEntity tileEntity = getWorld().getTileEntity(pos);
 		if (!(tileEntity instanceof TileEntityRoost)) return;
 
-		TileEntityRoost tileEntityRoost = (TileEntityRoost) worldObj.getTileEntity(pos);
+		TileEntityRoost tileEntityRoost = (TileEntityRoost) getWorld().getTileEntity(pos);
 
 		int[] slots = tileEntityRoost.getSlotsForFace(null);
 
@@ -125,7 +125,7 @@ public class TileEntityCollector extends TileEntity implements ISidedInventory, 
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		if (worldObj.getTileEntity(pos) != this) {
+		if (getWorld().getTileEntity(pos) != this) {
 			return false;
 		} else {
 			return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;

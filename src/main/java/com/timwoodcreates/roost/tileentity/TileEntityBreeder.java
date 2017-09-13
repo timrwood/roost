@@ -28,7 +28,7 @@ public class TileEntityBreeder extends TileEntityChickenContainer {
 
 	@Override
 	protected void isFullOfChickensChanged(boolean isFull) {
-		BlockBreeder.setIsBreedingState(isFull, worldObj, pos);
+		BlockBreeder.setIsBreedingState(isFull, getWorld(), pos);
 	}
 
 	@Override
@@ -36,14 +36,14 @@ public class TileEntityBreeder extends TileEntityChickenContainer {
 		DataChicken left = getChickenData(0);
 		DataChicken right = getChickenData(1);
 		if (left != null && right != null) {
-			putStackInOutput(left.createChildStack(right, worldObj));
+			putStackInOutput(left.createChildStack(right, getWorld()));
 			playSpawnSound();
 			spawnParticles();
 		}
 	}
 
 	private void playSpawnSound() {
-		worldObj.playSound(null, pos, SoundEvents.ENTITY_CHICKEN_EGG, SoundCategory.NEUTRAL, 0.5F, 0.8F);
+		getWorld().playSound(null, pos, SoundEvents.ENTITY_CHICKEN_EGG, SoundCategory.NEUTRAL, 0.5F, 0.8F);
 	}
 
 	private void spawnParticles() {
@@ -54,8 +54,8 @@ public class TileEntityBreeder extends TileEntityChickenContainer {
 	}
 
 	private void spawnParticle(double x, double z, double xOffset, double zOffset) {
-		if (worldObj instanceof WorldServer) {
-			WorldServer worldServer = (WorldServer) worldObj;
+		if (getWorld() instanceof WorldServer) {
+			WorldServer worldServer = (WorldServer) getWorld();
 			worldServer.spawnParticle(EnumParticleTypes.HEART, pos.getX() + x, pos.getY() + 0.5d, pos.getZ() + z, 2,
 					xOffset, 0.2d, zOffset, 0.02D);
 		}
