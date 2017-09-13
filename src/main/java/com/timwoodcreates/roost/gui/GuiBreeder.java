@@ -1,17 +1,16 @@
 package com.timwoodcreates.roost.gui;
 
-import java.text.DecimalFormat;
 import java.util.List;
 
 import com.google.common.collect.Lists;
 import com.timwoodcreates.roost.Roost;
 import com.timwoodcreates.roost.inventory.ContainerBreeder;
+import com.timwoodcreates.roost.tileentity.TileEntityBreeder;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiBreeder extends GuiContainer {
@@ -19,11 +18,9 @@ public class GuiBreeder extends GuiContainer {
 	private static final ResourceLocation BREEDER_GUI_TEXTURES = new ResourceLocation(Roost.MODID,
 			"textures/gui/breeder.png");
 
-	private static final DecimalFormat FORMATTER = new DecimalFormat("0.0%");
+	private final TileEntityBreeder breederInventory;
 
-	private final IInventory breederInventory;
-
-	public GuiBreeder(InventoryPlayer playerInventory, IInventory breederInventory) {
+	public GuiBreeder(InventoryPlayer playerInventory, TileEntityBreeder breederInventory) {
 		super(new ContainerBreeder(playerInventory, breederInventory));
 		this.breederInventory = breederInventory;
 		this.xSize = 176;
@@ -39,7 +36,7 @@ public class GuiBreeder extends GuiContainer {
 
 		if (mouseX > x + 84 && mouseX < x + 110 && mouseY > y + 22 && mouseY < y + 34) {
 			List<String> list = Lists.<String>newArrayList();
-			list.add(FORMATTER.format(getProgress()));
+			list.add(breederInventory.getFormattedProgress());
 			drawHoveringText(list, mouseX - x, mouseY - y);
 		}
 	}
@@ -56,13 +53,8 @@ public class GuiBreeder extends GuiContainer {
 	}
 
 	private int getProgressWidth() {
-		double progress = getProgress();
+		double progress = breederInventory.getProgress();
 		return progress == 0.0D ? 0 : 1 + (int) (progress * 25);
-	}
-
-	private double getProgress() {
-		double full = breederInventory.getField(0);
-		return full == 0 ? 0 : breederInventory.getField(1) / full;
 	}
 
 }

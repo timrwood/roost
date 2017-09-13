@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 @Mod(modid = Roost.MODID, version = Roost.VERSION)
@@ -23,6 +24,9 @@ public class Roost {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
+		FMLInterModComms.sendMessage("Waila", "register",
+				"com.timwoodcreates.roost.integration.waila.RoostWailaDataProvider.register");
+
 		PROXY.preInit(e);
 	}
 }

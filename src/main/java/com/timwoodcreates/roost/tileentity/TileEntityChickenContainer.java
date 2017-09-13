@@ -1,5 +1,7 @@
 package com.timwoodcreates.roost.tileentity;
 
+import java.text.DecimalFormat;
+
 import com.timwoodcreates.roost.data.DataChicken;
 import com.timwoodcreates.roost.util.UtilNBTTagCompoundHelper;
 
@@ -15,6 +17,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 
 public abstract class TileEntityChickenContainer extends TileEntity implements ISidedInventory, ITickable {
+
+	private static final DecimalFormat FORMATTER = new DecimalFormat("0.0%");
 
 	private ItemStack[] inventory = new ItemStack[getSizeInventory()];
 	private boolean mightNeedToUpdateChickenInfo = true;
@@ -94,6 +98,14 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 		return time;
 	}
 
+	public double getProgress() {
+		return timeUntilNextDrop == 0 ? 0 : (double) timeElapsed / (double) timeUntilNextDrop;
+	}
+
+	public String getFormattedProgress() {
+		return FORMATTER.format(getProgress());
+	}
+
 	private void spawnChickenDropIfNeeded() {
 		if (fullOfChickens && hasEnoughSeeds() && (timeElapsed >= timeUntilNextDrop)) {
 			if (timeUntilNextDrop > 0) {
@@ -123,7 +135,7 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 
 	protected abstract int requiredSeedsForDrop();
 
-	private boolean hasEnoughSeeds() {
+	protected boolean hasEnoughSeeds() {
 		int needed = requiredSeedsForDrop();
 		if (needed == 0) return true;
 		ItemStack stack = getStackInSlot(getSizeChickenInventory());

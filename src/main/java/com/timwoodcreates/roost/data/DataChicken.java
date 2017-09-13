@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 import com.google.common.base.CaseFormat;
 import com.timwoodcreates.roost.RoostItems;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityChicken;
@@ -118,12 +119,16 @@ public class DataChicken {
 		return name;
 	}
 
-	public String getI18NName() {
-		return i18nName;
+	public String getDisplayName() {
+		return I18n.format(i18nName);
 	}
 
 	public boolean isEqual(DataChicken other) {
 		return true;
+	}
+
+	public String getDisplaySummary() {
+		return getDisplayName();
 	}
 
 }

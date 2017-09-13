@@ -1,5 +1,7 @@
 package com.timwoodcreates.roost.tileentity;
 
+import java.util.List;
+
 import com.timwoodcreates.roost.Roost;
 import com.timwoodcreates.roost.data.DataChicken;
 
@@ -18,6 +20,8 @@ import net.minecraft.world.World;
 
 public class TileEntityRoost extends TileEntityChickenContainer {
 
+	private static final String CHICKEN_KEY = "Chicken";
+	private static final String COMPLETE_KEY = "Complete";
 	private static int CHICKEN_SLOT = 0;
 
 	@Override
@@ -85,6 +89,18 @@ public class TileEntityRoost extends TileEntityChickenContainer {
 
 	private void playPullChickenOutSound() {
 		worldObj.playSound(null, pos, SoundEvents.ENTITY_ITEMFRAME_REMOVE_ITEM, SoundCategory.BLOCKS, 1.0F, 1.0F);
+	}
+
+	public void addInfoToTooltip(List<String> tooltip, NBTTagCompound tag) {
+		if (tag.hasKey(CHICKEN_KEY)) tooltip.add(tag.getString(CHICKEN_KEY));
+		if (tag.hasKey(COMPLETE_KEY)) tooltip.add("Progress: " + tag.getString(COMPLETE_KEY));
+	}
+
+	public void storeInfoForTooltip(NBTTagCompound tag) {
+		DataChicken chicken = getChickenData(CHICKEN_SLOT);
+		if (chicken == null) return;
+		tag.setString(CHICKEN_KEY, chicken.getDisplaySummary());
+		tag.setString(COMPLETE_KEY, getFormattedProgress());
 	}
 
 	@Override

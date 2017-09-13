@@ -182,4 +182,9 @@ public class DataChickenModded extends DataChicken {
 		return "DataChickenModded [name=" + getName() + " type=" + type + ", tier=" + tier + ", gain=" + gain
 				+ ", growth=" + growth + ", strength=" + strength + "]";
 	}
+
+	@Override
+	public String getDisplaySummary() {
+		return super.getDisplaySummary() + " " + growth + "/" + gain + "/" + strength;
+	}
 }
