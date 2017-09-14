@@ -16,15 +16,11 @@ import net.minecraft.world.World;
 
 public class DataChickenVanilla extends DataChicken {
 
-	private static final NBTTagCompound TAG_COMPOUND = new NBTTagCompound();
-
-	static {
-		TAG_COMPOUND.setInteger(MOD_ID_KEY, MOD_ID_VANILLA);
-	}
+	private static final String VANILLA_TYPE = "minecraft:chicken";
 
 	public static DataChicken getDataFromStack(ItemStack stack) {
 		NBTTagCompound tagCompound = stack.getTagCompound();
-		if (tagCompound == null || tagCompound.getInteger(MOD_ID_KEY) != MOD_ID_VANILLA) return null;
+		if (tagCompound == null || !tagCompound.getString(CHICKEN_ID_KEY).equals(VANILLA_TYPE)) return null;
 		return new DataChickenVanilla();
 	}
 
@@ -34,9 +30,7 @@ public class DataChickenVanilla extends DataChicken {
 	}
 
 	public static void getItemCageSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
-		ItemStack stack = new ItemStack(itemIn, 1, 0);
-		stack.setTagCompound(TAG_COMPOUND.copy());
-		subItems.add(stack);
+		subItems.add(new DataChickenVanilla().buildChickenStack());
 	}
 
 	public DataChickenVanilla() {
@@ -65,13 +59,15 @@ public class DataChickenVanilla extends DataChicken {
 		chicken.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 		chicken.onInitialSpawn(world.getDifficultyForLocation(pos), null);
 		chicken.setGrowingAge(getLayTime());
-		world.spawnEntityInWorld(chicken);
+		world.spawnEntity(chicken);
 	}
 
 	@Override
 	public ItemStack buildChickenStack() {
 		ItemStack stack = new ItemStack(RoostItems.ITEM_CHICKEN);
-		stack.setTagCompound(TAG_COMPOUND.copy());
+		NBTTagCompound tagCompound = new NBTTagCompound();
+		tagCompound.setString(CHICKEN_ID_KEY, VANILLA_TYPE);
+		stack.setTagCompound(tagCompound);
 		return stack;
 	}
 

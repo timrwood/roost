@@ -44,7 +44,7 @@ public class ContainerBreeder extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer playerIn) {
-		return breederInventory.isUseableByPlayer(playerIn);
+		return breederInventory.isUsableByPlayer(playerIn);
 	}
 
 	@Override
@@ -81,33 +81,28 @@ public class ContainerBreeder extends Container {
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int fromSlot) {
-		ItemStack previous = null;
+		ItemStack previous = ItemStack.EMPTY;
 		Slot slot = inventorySlots.get(fromSlot);
 
 		if (slot != null && slot.getHasStack()) {
 			ItemStack current = slot.getStack();
 			previous = current.copy();
 
-			if (fromSlot < 6) {
-				if (!mergeItemStack(current, 6, 42, true)) {
-					return null;
+			if (fromSlot < breederInventory.getSizeInventory()) {
+				if (!mergeItemStack(current, breederInventory.getSizeInventory(), inventorySlots.size(), true)) {
+					return ItemStack.EMPTY;
 				}
-			} else if (!mergeItemStack(current, 0, 6, false)) {
-				return null;
+			} else if (!mergeItemStack(current, 0, breederInventory.getSizeInventory(), false)) {
+				return ItemStack.EMPTY;
 			}
 
-			if (current.stackSize == 0) {
-				slot.putStack((ItemStack) null);
+			if (current.isEmpty()) {
+				slot.putStack(ItemStack.EMPTY);
 			} else {
 				slot.onSlotChanged();
 			}
-
-			if (current.stackSize == previous.stackSize) {
-				return null;
-			}
-
-			slot.onPickupFromSlot(playerIn, current);
 		}
+
 		return previous;
 	}
 

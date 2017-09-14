@@ -16,6 +16,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -32,7 +33,7 @@ public class ItemChicken extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
 		DataChicken.getItemCageSubItems(itemIn, tab, subItems);
 	}
 
@@ -51,15 +52,15 @@ public class ItemChicken extends Item {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos,
-			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand,
+			EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (!worldIn.isRemote) {
 			TileEntity tileEntity = worldIn.getTileEntity(pos);
 
 			if (tileEntity != null && tileEntity instanceof TileEntityRoost) {
-				putChickenIn(stack, (TileEntityRoost) tileEntity);
+				putChickenIn(playerIn.getHeldItem(hand), (TileEntityRoost) tileEntity);
 			} else {
-				spawnChicken(stack, playerIn, worldIn, pos.offset(facing));
+				spawnChicken(playerIn.getHeldItem(hand), playerIn, worldIn, pos.offset(facing));
 			}
 		}
 
@@ -74,7 +75,7 @@ public class ItemChicken extends Item {
 		DataChicken chickenData = DataChicken.getDataFromStack(stack);
 		if (chickenData == null) return;
 		chickenData.spawnEntity(worldIn, pos);
-		stack.stackSize--;
+		stack.shrink(1);
 	}
 
 	private class ItemChickenPropertyGetter implements IItemPropertyGetter {

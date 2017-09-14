@@ -33,38 +33,33 @@ public class ContainerCollector extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer playerIn) {
-		return collectorInventory.isUseableByPlayer(playerIn);
+		return collectorInventory.isUsableByPlayer(playerIn);
 	}
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int fromSlot) {
-		ItemStack previous = null;
+		ItemStack previous = ItemStack.EMPTY;
 		Slot slot = inventorySlots.get(fromSlot);
 
 		if (slot != null && slot.getHasStack()) {
 			ItemStack current = slot.getStack();
 			previous = current.copy();
 
-			if (fromSlot < 27) {
-				if (!this.mergeItemStack(current, 27, 63, true)) {
-					return null;
+			if (fromSlot < collectorInventory.getSizeInventory()) {
+				if (!mergeItemStack(current, collectorInventory.getSizeInventory(), inventorySlots.size(), true)) {
+					return ItemStack.EMPTY;
 				}
-			} else if (!this.mergeItemStack(current, 0, 27, false)) {
-				return null;
+			} else if (!mergeItemStack(current, 0, collectorInventory.getSizeInventory(), false)) {
+				return ItemStack.EMPTY;
 			}
 
-			if (current.stackSize == 0) {
-				slot.putStack((ItemStack) null);
+			if (current.isEmpty()) {
+				slot.putStack(ItemStack.EMPTY);
 			} else {
 				slot.onSlotChanged();
 			}
-
-			if (current.stackSize == previous.stackSize) {
-				return null;
-			}
-
-			slot.onPickupFromSlot(playerIn, current);
 		}
+
 		return previous;
 	}
 

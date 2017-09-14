@@ -41,11 +41,12 @@ public class TileEntityRoost extends TileEntityChickenContainer {
 
 	public boolean putChickenIn(ItemStack newStack) {
 		ItemStack oldStack = getStackInSlot(CHICKEN_SLOT);
-		if (newStack == null || !isItemValidForSlot(CHICKEN_SLOT, newStack)) {
+
+		if (!isItemValidForSlot(CHICKEN_SLOT, newStack)) {
 			return false;
 		}
 
-		if (oldStack == null) {
+		if (oldStack.isEmpty()) {
 			setInventorySlotContents(CHICKEN_SLOT, newStack.splitStack(16));
 			markDirty();
 			playPutChickenInSound();
@@ -53,11 +54,11 @@ public class TileEntityRoost extends TileEntityChickenContainer {
 		}
 
 		if (oldStack.isItemEqual(newStack) && ItemStack.areItemStackTagsEqual(oldStack, newStack)) {
-			int itemsAfterAdding = Math.min(oldStack.stackSize + newStack.stackSize, 16);
-			int itemsToAdd = itemsAfterAdding - oldStack.stackSize;
+			int itemsAfterAdding = Math.min(oldStack.getCount() + newStack.getCount(), 16);
+			int itemsToAdd = itemsAfterAdding - oldStack.getCount();
 			if (itemsToAdd > 0) {
 				newStack.splitStack(itemsToAdd);
-				oldStack.stackSize += itemsToAdd;
+				oldStack.grow(itemsToAdd);
 				markDirty();
 				playPutChickenInSound();
 				return true;
@@ -70,12 +71,12 @@ public class TileEntityRoost extends TileEntityChickenContainer {
 	public boolean pullChickenOut(EntityPlayer playerIn) {
 		ItemStack spawnStack = getStackInSlot(CHICKEN_SLOT);
 
-		if (spawnStack == null) {
+		if (spawnStack.isEmpty()) {
 			return false;
 		}
 
 		playerIn.inventory.addItemStackToInventory(spawnStack);
-		setInventorySlotContents(CHICKEN_SLOT, null);
+		setInventorySlotContents(CHICKEN_SLOT, ItemStack.EMPTY);
 
 		markDirty();
 		playPullChickenOutSound();

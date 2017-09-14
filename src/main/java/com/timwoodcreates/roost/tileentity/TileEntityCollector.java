@@ -1,7 +1,6 @@
 package com.timwoodcreates.roost.tileentity;
 
 import com.timwoodcreates.roost.Roost;
-import com.timwoodcreates.roost.util.UtilNBTTagCompoundHelper;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -12,13 +11,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 
 public class TileEntityCollector extends TileEntity implements ISidedInventory, ITickable {
 
-	private ItemStack[] inventory = new ItemStack[27];
+	private NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(getSizeInventory(), ItemStack.EMPTY);
 	private int searchOffset = 0;
 
 	@Override
@@ -57,12 +57,12 @@ public class TileEntityCollector extends TileEntity implements ISidedInventory, 
 	private boolean pullItemFromSlot(TileEntityRoost tileRoost, int index) {
 		ItemStack itemStack = tileRoost.getStackInSlot(index);
 
-		if (itemStack != null && tileRoost.canExtractItem(index, itemStack, null)) {
+		if (tileRoost.canExtractItem(index, itemStack, null)) {
 			ItemStack itemStack1 = itemStack.copy();
-			ItemStack itemStack2 = TileEntityHopper.putStackInInventoryAllSlots(this, tileRoost.decrStackSize(index, 1),
-					null);
+			ItemStack itemStack2 = TileEntityHopper.putStackInInventoryAllSlots(this, tileRoost,
+					tileRoost.decrStackSize(index, 1), null);
 
-			if (itemStack2 == null || itemStack2.stackSize == 0) {
+			if (itemStack2.isEmpty()) {
 				tileRoost.markDirty();
 				markDirty();
 				return true;
@@ -96,7 +96,15 @@ public class TileEntityCollector extends TileEntity implements ISidedInventory, 
 
 	@Override
 	public ItemStack getStackInSlot(int index) {
-		return inventory[index];
+		return inventory.get(index);
+	}
+
+	@Override
+	public boolean isEmpty() {
+		for (ItemStack itemStack : inventory) {
+			if (!itemStack.isEmpty()) return false;
+		}
+		return true;
 	}
 
 	@Override
@@ -111,10 +119,10 @@ public class TileEntityCollector extends TileEntity implements ISidedInventory, 
 
 	@Override
 	public void setInventorySlotContents(int index, ItemStack stack) {
-		inventory[index] = stack;
+		inventory.set(index, stack);
 
-		if (stack != null && stack.stackSize > getInventoryStackLimit()) {
-			stack.stackSize = getInventoryStackLimit();
+		if (stack.getCount() > getInventoryStackLimit()) {
+			stack.setCount(getInventoryStackLimit());
 		}
 	}
 
@@ -124,7 +132,7 @@ public class TileEntityCollector extends TileEntity implements ISidedInventory, 
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(EntityPlayer player) {
 		if (getWorld().getTileEntity(pos) != this) {
 			return false;
 		} else {
@@ -157,7 +165,7 @@ public class TileEntityCollector extends TileEntity implements ISidedInventory, 
 
 	@Override
 	public void clear() {
-		inventory = new ItemStack[getSizeInventory()];
+		inventory.clear();
 	}
 
 	@Override
@@ -186,13 +194,13 @@ public class TileEntityCollector extends TileEntity implements ISidedInventory, 
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		UtilNBTTagCompoundHelper.readInventoryFromNBT(this, compound);
+		ItemStackHelper.loadAllItems(compound, inventory);
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
-		UtilNBTTagCompoundHelper.writeInventoryToNBT(this, compound);
+		ItemStackHelper.saveAllItems(compound, inventory);
 		return compound;
 	}
 

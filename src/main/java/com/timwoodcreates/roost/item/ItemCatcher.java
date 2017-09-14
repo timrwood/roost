@@ -31,7 +31,7 @@ public class ItemCatcher extends Item {
 	public boolean itemInteractionForEntity(ItemStack itemstack, EntityPlayer player, EntityLivingBase entity,
 			EnumHand hand) {
 		Vec3d pos = new Vec3d(entity.posX, entity.posY, entity.posZ);
-		World world = entity.worldObj;
+		World world = entity.getEntityWorld();
 
 		if (!captureChicken(entity, world.isRemote)) {
 			return false;
@@ -59,7 +59,7 @@ public class ItemCatcher extends Item {
 			item.motionX = 0;
 			item.motionY = 0.2D;
 			item.motionZ = 0;
-			entity.worldObj.removeEntity(entity);
+			entity.getEntityWorld().removeEntity(entity);
 		}
 
 		return true;

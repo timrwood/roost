@@ -6,9 +6,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import com.setycz.chickens.ChickensRegistry;
-import com.setycz.chickens.ChickensRegistryItem;
-import com.setycz.chickens.chicken.EntityChickensChicken;
+import com.setycz.chickens.entity.EntityChickensChicken;
+import com.setycz.chickens.registry.ChickensRegistry;
+import com.setycz.chickens.registry.ChickensRegistryItem;
 import com.timwoodcreates.roost.RoostItems;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -17,6 +17,7 @@ import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -33,7 +34,7 @@ public class DataChickenModded extends DataChicken {
 	public static DataChicken getDataFromEntity(Entity entity) {
 		if (entity instanceof EntityChickensChicken) {
 			NBTTagCompound tagCompound = entity.writeToNBT(new NBTTagCompound());
-			ChickensRegistryItem chicken = ChickensRegistry.getByType(tagCompound.getInteger(TYPE_KEY));
+			ChickensRegistryItem chicken = ChickensRegistry.getByRegistryName(tagCompound.getString(TYPE_KEY));
 			if (chicken != null) return new DataChickenModded(chicken, tagCompound);
 		}
 		return null;
@@ -50,8 +51,7 @@ public class DataChickenModded extends DataChicken {
 		for (ChickensRegistryItem item : getChickenRegistryItems()) {
 			ItemStack stack = new ItemStack(itemIn, 1, 0);
 			NBTTagCompound tagCompound = new NBTTagCompound();
-			tagCompound.setInteger(MOD_ID_KEY, MOD_ID_CHICKENS);
-			tagCompound.setInteger(CHICKEN_ID_KEY, item.getId());
+			tagCompound.setString(CHICKEN_ID_KEY, item.getRegistryName().toString());
 			tagCompound.setInteger(GAIN_KEY, 1);
 			tagCompound.setInteger(GROWTH_KEY, 1);
 			tagCompound.setInteger(STRENGTH_KEY, 1);
@@ -66,7 +66,7 @@ public class DataChickenModded extends DataChicken {
 			@Override
 			public int compare(ChickensRegistryItem left, ChickensRegistryItem right) {
 				if (left.getTier() != right.getTier()) return left.getTier() - right.getTier();
-				return left.getId() - right.getId();
+				return left.getEntityName().compareTo(right.getEntityName());
 			}
 		};
 
@@ -78,8 +78,8 @@ public class DataChickenModded extends DataChicken {
 
 	private static ChickensRegistryItem chickensRegistryItemForStack(ItemStack stack) {
 		NBTTagCompound tagCompound = stack.getTagCompound();
-		if (tagCompound == null || tagCompound.getInteger(MOD_ID_KEY) != MOD_ID_CHICKENS) return null;
-		return ChickensRegistry.getByType(tagCompound.getInteger(CHICKEN_ID_KEY));
+		if (tagCompound == null) return null;
+		return ChickensRegistry.getByRegistryName(tagCompound.getString(CHICKEN_ID_KEY));
 	}
 
 	private int gain = 1;
@@ -89,11 +89,11 @@ public class DataChickenModded extends DataChicken {
 	private int minLayTime = 6000;
 	private int strength = 1;
 	private int tier = 0;
-	private int type = 0;
+	private ResourceLocation registryName;
 
 	private DataChickenModded(ChickensRegistryItem chicken, NBTTagCompound compound) {
 		super(chicken.getEntityName(), "entity." + chicken.getEntityName() + ".name");
-		type = chicken.getId();
+		registryName = chicken.getRegistryName();
 		tier = chicken.getTier();
 		item = chicken.createLayItem();
 		minLayTime = chicken.getMinLayTime();
@@ -118,7 +118,7 @@ public class DataChickenModded extends DataChicken {
 	public EntityChicken buildEntity(World world) {
 		EntityChickensChicken chicken = new EntityChickensChicken(world);
 		chicken.readEntityFromNBT(createTagCompound());
-		chicken.setChickenType(type);
+		chicken.setChickenType(registryName.toString());
 		return chicken;
 	}
 
@@ -128,17 +128,16 @@ public class DataChickenModded extends DataChicken {
 		chicken.readEntityFromNBT(createTagCompound());
 		chicken.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 		chicken.onInitialSpawn(world.getDifficultyForLocation(pos), null);
-		chicken.setChickenType(type);
+		chicken.setChickenType(registryName.toString());
 		chicken.setGrowingAge(getLayTime());
-		world.spawnEntityInWorld(chicken);
+		world.spawnEntity(chicken);
 	}
 
 	@Override
 	public ItemStack buildChickenStack() {
 		ItemStack stack = new ItemStack(RoostItems.ITEM_CHICKEN);
 		NBTTagCompound tagCompound = createTagCompound();
-		tagCompound.setInteger(MOD_ID_KEY, MOD_ID_CHICKENS);
-		tagCompound.setInteger(CHICKEN_ID_KEY, type);
+		tagCompound.setString(CHICKEN_ID_KEY, registryName.toString());
 		stack.setTagCompound(tagCompound);
 		return stack;
 	}
@@ -146,7 +145,7 @@ public class DataChickenModded extends DataChicken {
 	@Override
 	public ItemStack createDropStack() {
 		ItemStack stack = item.copy();
-		stack.stackSize = gain >= 10 ? 3 : gain >= 5 ? 2 : 1;
+		stack.setCount(gain >= 10 ? 3 : gain >= 5 ? 2 : 1);
 		return stack;
 	}
 
@@ -172,15 +171,16 @@ public class DataChickenModded extends DataChicken {
 	public boolean isEqual(DataChicken other) {
 		if (other instanceof DataChickenModded) {
 			DataChickenModded o = (DataChickenModded) other;
-			return (type == o.type) && (growth == o.growth) && (gain == o.gain) && (strength == o.strength);
+			return (registryName.equals(o.registryName)) && (growth == o.growth) && (gain == o.gain)
+					&& (strength == o.strength);
 		}
 		return false;
 	}
 
 	@Override
 	public String toString() {
-		return "DataChickenModded [name=" + getName() + " type=" + type + ", tier=" + tier + ", gain=" + gain
-				+ ", growth=" + growth + ", strength=" + strength + "]";
+		return "DataChickenModded [name=" + getName() + " registryName=" + registryName + ", tier=" + tier + ", gain="
+				+ gain + ", growth=" + growth + ", strength=" + strength + "]";
 	}
 
 	@Override

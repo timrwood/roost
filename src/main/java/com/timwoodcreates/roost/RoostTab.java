@@ -1,7 +1,7 @@
 package com.timwoodcreates.roost;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public class RoostTab extends CreativeTabs {
 
@@ -10,8 +10,8 @@ public class RoostTab extends CreativeTabs {
 	}
 
 	@Override
-	public Item getTabIconItem() {
-		return RoostItems.ITEM_CHICKEN;
+	public ItemStack getTabIconItem() {
+		return new ItemStack(RoostItems.ITEM_CHICKEN);
 	}
 
 }

@@ -3,7 +3,6 @@ package com.timwoodcreates.roost.tileentity;
 import java.text.DecimalFormat;
 
 import com.timwoodcreates.roost.data.DataChicken;
-import com.timwoodcreates.roost.util.UtilNBTTagCompoundHelper;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -15,12 +14,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.NonNullList;
 
 public abstract class TileEntityChickenContainer extends TileEntity implements ISidedInventory, ITickable {
 
 	private static final DecimalFormat FORMATTER = new DecimalFormat("0.0%");
 
-	private ItemStack[] inventory = new ItemStack[getSizeInventory()];
+	private NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(getSizeInventory(), ItemStack.EMPTY);
 	private boolean mightNeedToUpdateChickenInfo = true;
 	private boolean skipNextTimerReset = false;
 	private int timeUntilNextDrop = 0;
@@ -139,7 +139,7 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 		int needed = requiredSeedsForDrop();
 		if (needed == 0) return true;
 		ItemStack stack = getStackInSlot(getSizeChickenInventory());
-		return (stack != null && stack.stackSize >= needed);
+		return stack.getCount() >= needed;
 	}
 
 	private int getOutputStackIndex() {
@@ -152,12 +152,8 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 	protected ItemStack putStackInOutput(ItemStack stack) {
 		int max = getSizeInventory();
 
-		for (int i = getOutputStackIndex(); i < max && stack != null && stack.stackSize > 0; i++) {
+		for (int i = getOutputStackIndex(); i < max && !stack.isEmpty(); i++) {
 			stack = insertStack(stack, i);
-		}
-
-		if (stack != null && stack.stackSize == 0) {
-			stack = null;
 		}
 
 		markDirty();
@@ -169,18 +165,18 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 		int max = Math.min(stack.getMaxStackSize(), getInventoryStackLimit());
 
 		ItemStack outputStack = getStackInSlot(index);
-		if (outputStack == null) {
-			if (stack.stackSize >= max) {
+		if (outputStack.isEmpty()) {
+			if (stack.getCount() >= max) {
 				setInventorySlotContents(index, stack);
-				stack = null;
+				stack = ItemStack.EMPTY;
 			} else {
 				setInventorySlotContents(index, stack.splitStack(max));
 			}
 		} else if (canCombine(outputStack, stack)) {
-			if (outputStack.stackSize < max) {
-				int itemsToMove = Math.min(stack.stackSize, max - outputStack.stackSize);
-				stack.stackSize -= itemsToMove;
-				outputStack.stackSize += itemsToMove;
+			if (outputStack.getCount() < max) {
+				int itemsToMove = Math.min(stack.getCount(), max - outputStack.getCount());
+				stack.shrink(itemsToMove);
+				outputStack.grow(itemsToMove);
 			}
 		}
 
@@ -190,7 +186,7 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 	private boolean canCombine(ItemStack a, ItemStack b) {
 		if (a.getItem() != b.getItem()) return false;
 		if (a.getMetadata() != b.getMetadata()) return false;
-		if (a.stackSize > a.getMaxStackSize()) return false;
+		if (a.getCount() > a.getMaxStackSize()) return false;
 		return ItemStack.areItemStackTagsEqual(a, b);
 	}
 
@@ -201,7 +197,15 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 
 	@Override
 	public ItemStack getStackInSlot(int index) {
-		return inventory[index];
+		return inventory.get(index);
+	}
+
+	@Override
+	public boolean isEmpty() {
+		for (ItemStack itemStack : inventory) {
+			if (!itemStack.isEmpty()) return false;
+		}
+		return true;
 	}
 
 	@Override
@@ -216,10 +220,10 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 
 	@Override
 	public void setInventorySlotContents(int index, ItemStack stack) {
-		inventory[index] = stack;
+		inventory.set(index, stack);
 
-		if (stack != null && stack.stackSize > getInventoryStackLimit()) {
-			stack.stackSize = getInventoryStackLimit();
+		if (stack.getCount() > getInventoryStackLimit()) {
+			stack.setCount(getInventoryStackLimit());
 		}
 
 		if (index < getSizeChickenInventory()) {
@@ -233,7 +237,7 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(EntityPlayer player) {
 		if (getWorld().getTileEntity(pos) != this) {
 			return false;
 		} else {
@@ -274,7 +278,7 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 
 	@Override
 	public void clear() {
-		inventory = new ItemStack[getSizeInventory()];
+		inventory.clear();
 	}
 
 	@Override
@@ -321,7 +325,8 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		UtilNBTTagCompoundHelper.readInventoryFromNBT(this, compound);
+		clear();
+		ItemStackHelper.loadAllItems(compound, inventory);
 		timeUntilNextDrop = compound.getInteger("TimeUntilNextChild");
 		timeElapsed = compound.getInteger("TimeElapsed");
 		skipNextTimerReset = true;
@@ -330,7 +335,7 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
-		UtilNBTTagCompoundHelper.writeInventoryToNBT(this, compound);
+		ItemStackHelper.saveAllItems(compound, inventory);
 		compound.setInteger("TimeUntilNextChild", timeUntilNextDrop);
 		compound.setInteger("TimeElapsed", timeElapsed);
 		return compound;

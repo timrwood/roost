@@ -20,9 +20,6 @@ import net.minecraftforge.fml.common.Loader;
 public class DataChicken {
 
 	protected static final String CHICKEN_ID_KEY = "Chicken";
-	protected static final String MOD_ID_KEY = "Mod";
-	protected static final int MOD_ID_VANILLA = 0;
-	protected static final int MOD_ID_CHICKENS = 1;
 	private static final Pattern REMOVE_CHICKENS_PREFIX = Pattern.compile("_?chick(en)?s?_?");
 
 	public static DataChicken getDataFromEntity(Entity entity) {
@@ -58,7 +55,7 @@ public class DataChicken {
 	}
 
 	public static boolean isChicken(ItemStack stack) {
-		return stack != null && stack.getItem() == RoostItems.ITEM_CHICKEN;
+		return stack.getItem() == RoostItems.ITEM_CHICKEN;
 	}
 
 	private String name;
@@ -78,7 +75,7 @@ public class DataChicken {
 	}
 
 	public ItemStack buildChickenStack() {
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	public EntityChicken buildEntity(World world) {
@@ -92,9 +89,9 @@ public class DataChicken {
 		if (chickenA.getClass() != chickenB.getClass()) return chickenA.buildChickenStack();
 		EntityChicken parentA = chickenA.buildEntity(world);
 		EntityChicken parentB = chickenB.buildEntity(world);
-		if (parentA == null || parentB == null) return null;
+		if (parentA == null || parentB == null) return ItemStack.EMPTY;
 		DataChicken childData = DataChicken.getDataFromEntity(parentA.createChild(parentB));
-		if (childData == null) return null;
+		if (childData == null) return ItemStack.EMPTY;
 		return childData.buildChickenStack();
 	}
 
@@ -104,11 +101,11 @@ public class DataChicken {
 	}
 
 	public ItemStack createDropStack() {
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	public int getAddedTime(ItemStack stack) {
-		return stack == null ? 0 : Math.max(0, stack.stackSize);
+		return Math.max(0, stack.getCount());
 	}
 
 	public int getLayTime() {
