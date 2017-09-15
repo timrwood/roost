@@ -89,7 +89,7 @@ public class ContainerRoost extends Container {
 				if (!mergeItemStack(current, tileRoost.getSizeInventory(), inventorySlots.size(), true)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (!mergeItemStack(current, 0, tileRoost.getSizeInventory(), false)) {
+			} else if (!mergeItemStack(current, 0, 1, false)) {
 				return ItemStack.EMPTY;
 			}
 

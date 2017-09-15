@@ -21,10 +21,10 @@ import net.minecraft.world.World;
 public class BlockCollector extends BlockContainer {
 
 	public BlockCollector() {
-		super(Material.IRON);
-		setHardness(3.0F);
-		setResistance(8.0F);
-		setSoundType(SoundType.METAL);
+		super(Material.WOOD);
+		setHardness(2.0F);
+		setResistance(5.0F);
+		setSoundType(SoundType.WOOD);
 	}
 
 	@Override

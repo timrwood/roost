@@ -6,6 +6,7 @@ import com.timwoodcreates.roost.data.DataChicken;
 import com.timwoodcreates.roost.data.EnumChickenType;
 import com.timwoodcreates.roost.tileentity.TileEntityRoost;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,6 +25,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemChicken extends Item {
+
+	private static String I18N_NAME = "entity.Chicken.name";
 
 	public ItemChicken() {
 		super();
@@ -47,7 +50,7 @@ public class ItemChicken extends Item {
 	@SideOnly(Side.CLIENT)
 	public String getItemStackDisplayName(ItemStack stack) {
 		DataChicken data = DataChicken.getDataFromStack(stack);
-		if (data == null) return super.getItemStackDisplayName(stack);
+		if (data == null) return I18n.format(I18N_NAME);
 		return data.getDisplayName();
 	}
 

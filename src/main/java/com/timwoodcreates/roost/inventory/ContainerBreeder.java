@@ -92,7 +92,7 @@ public class ContainerBreeder extends Container {
 				if (!mergeItemStack(current, breederInventory.getSizeInventory(), inventorySlots.size(), true)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (!mergeItemStack(current, 0, breederInventory.getSizeInventory(), false)) {
+			} else if (!mergeItemStack(current, 0, 3, false)) {
 				return ItemStack.EMPTY;
 			}
 
