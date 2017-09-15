@@ -28,7 +28,7 @@ public enum EnumChickenType implements IStringSerializable {
 	CINNABAR("cinnabar", 0.038),
 	CLAY("clay", 0.040),
 	COAL("coal", 0.042),
-	COLBALT("colbalt", 0.044),
+	COBALT("cobalt", 0.044),
 	CONDUCTIVE_IRON("conductive_iron", 0.046),
 	CONSTANTAN("constantan", 0.048),
 	COPPER("copper", 0.050),

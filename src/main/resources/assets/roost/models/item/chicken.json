@@ -24,7 +24,7 @@
     { "predicate": { "chicken": 0.037 }, "model": "roost:item/chicken/cinnabar" },
     { "predicate": { "chicken": 0.039 }, "model": "roost:item/chicken/clay" },
     { "predicate": { "chicken": 0.041 }, "model": "roost:item/chicken/coal" },
-    { "predicate": { "chicken": 0.043 }, "model": "roost:item/chicken/colbalt" },
+    { "predicate": { "chicken": 0.043 }, "model": "roost:item/chicken/cobalt" },
     { "predicate": { "chicken": 0.045 }, "model": "roost:item/chicken/conductive_iron" },
     { "predicate": { "chicken": 0.047 }, "model": "roost:item/chicken/constantan" },
     { "predicate": { "chicken": 0.049 }, "model": "roost:item/chicken/copper" },

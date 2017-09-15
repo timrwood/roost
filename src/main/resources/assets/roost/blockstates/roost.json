@@ -41,7 +41,7 @@
       "cinnabar": { "textures": { "chicken": "roost:blocks/chicken/cinnabar" } },
       "clay": { "textures": { "chicken": "roost:blocks/chicken/clay" } },
       "coal": { "textures": { "chicken": "roost:blocks/chicken/coal" } },
-      "colbalt": { "textures": { "chicken": "roost:blocks/chicken/colbalt" } },
+      "cobalt": { "textures": { "chicken": "roost:blocks/chicken/cobalt" } },
       "conductive_iron": { "textures": { "chicken": "roost:blocks/chicken/conductive_iron" } },
       "constantan": { "textures": { "chicken": "roost:blocks/chicken/constantan" } },
       "copper": { "textures": { "chicken": "roost:blocks/chicken/copper" } },
