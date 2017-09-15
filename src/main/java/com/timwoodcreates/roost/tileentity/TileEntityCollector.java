@@ -59,7 +59,7 @@ public class TileEntityCollector extends TileEntity implements ISidedInventory, 
 
 		if (tileRoost.canExtractItem(index, itemStack, null)) {
 			ItemStack itemStack1 = itemStack.copy();
-			ItemStack itemStack2 = TileEntityHopper.putStackInInventoryAllSlots(this, tileRoost,
+			ItemStack itemStack2 = TileEntityHopper.putStackInInventoryAllSlots(tileRoost, this,
 					tileRoost.decrStackSize(index, 1), null);
 
 			if (itemStack2.isEmpty()) {
