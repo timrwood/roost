@@ -24,7 +24,7 @@ public class Roost {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent e) {
-		FMLInterModComms.sendMessage("Waila", "register",
+		FMLInterModComms.sendMessage("waila", "register",
 				"com.timwoodcreates.roost.integration.waila.RoostWailaDataProvider.register");
 
 		PROXY.preInit(e);
