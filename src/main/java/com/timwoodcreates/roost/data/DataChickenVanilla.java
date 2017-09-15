@@ -50,7 +50,7 @@ public class DataChickenVanilla extends DataChicken {
 
 	@Override
 	public ItemStack createDropStack() {
-		Item item = rand.nextInt(3) > 0 ? Items.FEATHER : Items.EGG;
+		Item item = rand.nextInt(3) > 0 ? Items.EGG : Items.FEATHER;
 		return new ItemStack(item, 1);
 	}
 

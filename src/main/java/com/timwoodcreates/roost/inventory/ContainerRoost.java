@@ -89,7 +89,7 @@ public class ContainerRoost extends Container {
 				if (!mergeItemStack(current, 5, 41, true)) {
 					return null;
 				}
-			} else if (!mergeItemStack(current, 0, 5, false)) {
+			} else if (!mergeItemStack(current, 0, 1, false)) {
 				return null;
 			}
 

@@ -92,7 +92,7 @@ public class ContainerBreeder extends Container {
 				if (!mergeItemStack(current, 6, 42, true)) {
 					return null;
 				}
-			} else if (!mergeItemStack(current, 0, 6, false)) {
+			} else if (!mergeItemStack(current, 0, 3, false)) {
 				return null;
 			}
 
