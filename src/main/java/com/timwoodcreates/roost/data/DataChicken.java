@@ -1,5 +1,6 @@
 package com.timwoodcreates.roost.data;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.regex.Pattern;
@@ -19,8 +20,15 @@ import net.minecraftforge.fml.common.Loader;
 
 public class DataChicken {
 
-	protected static final String CHICKEN_ID_KEY = "Chicken";
+	public static final String CHICKEN_ID_KEY = "Chicken";
 	private static final Pattern REMOVE_CHICKENS_PREFIX = Pattern.compile("_?chick(en)?s?_?");
+
+	public static List<DataChicken> getAllChickens() {
+		List<DataChicken> chickens = new LinkedList<DataChicken>();
+		DataChickenVanilla.addAllChickens(chickens);
+		if (Loader.isModLoaded("chickens")) DataChickenModded.addAllChickens(chickens);
+		return chickens;
+	}
 
 	public static DataChicken getDataFromEntity(Entity entity) {
 		if (entity == null) return null;
@@ -46,11 +54,9 @@ public class DataChicken {
 		return data;
 	}
 
-	public static void getItemCageSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
-		DataChickenVanilla.getItemCageSubItems(itemIn, tab, subItems);
-
-		if (Loader.isModLoaded("chickens")) {
-			DataChickenModded.getItemCageSubItems(itemIn, tab, subItems);
+	public static void getItemChickenSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+		for (DataChicken chicken : getAllChickens()) {
+			subItems.add(chicken.buildChickenStack());
 		}
 	}
 
@@ -74,7 +80,19 @@ public class DataChicken {
 	public void addInfoToTooltip(List<String> tooltip) {
 	}
 
+	public boolean hasParents() {
+		return false;
+	}
+
+	public List<ItemStack> buildParentChickenStack() {
+		return null;
+	}
+
 	public ItemStack buildChickenStack() {
+		return ItemStack.EMPTY;
+	}
+
+	public ItemStack buildCaughtFromStack() {
 		return ItemStack.EMPTY;
 	}
 

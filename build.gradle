@@ -45,10 +45,15 @@ repositories {
         name = "CurseForge"
         url = "https://minecraft.curseforge.com/api/maven/"
     }
+     maven {
+        name = "Progwml6 Maven"
+        url "http://dvs1.progwml6.com/files/maven/"
+    }
 }
 
 dependencies {
     deobfCompile "chickens:chickens:${chickens_version}"
+    deobfCompile "mezz.jei:${jei_version}"
     deobfCompile "mcp.mobius.waila:Hwyla:${hwyla_version}"
 }
 

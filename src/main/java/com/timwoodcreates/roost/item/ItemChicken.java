@@ -30,14 +30,15 @@ public class ItemChicken extends Item {
 
 	public ItemChicken() {
 		super();
-		maxStackSize = 16;
+		setMaxStackSize(16);
+		setHasSubtypes(true);
 		addPropertyOverride(new ResourceLocation("chicken"), new ItemChickenPropertyGetter());
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-		DataChicken.getItemCageSubItems(itemIn, tab, subItems);
+		DataChicken.getItemChickenSubItems(itemIn, tab, subItems);
 	}
 
 	@Override

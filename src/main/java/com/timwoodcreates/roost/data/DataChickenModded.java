@@ -1,25 +1,25 @@
 package com.timwoodcreates.roost.data;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.setycz.chickens.ChickensMod;
 import com.setycz.chickens.entity.EntityChickensChicken;
+import com.setycz.chickens.item.ItemSpawnEgg;
 import com.setycz.chickens.registry.ChickensRegistry;
 import com.setycz.chickens.registry.ChickensRegistryItem;
 import com.timwoodcreates.roost.RoostItems;
 
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 
@@ -47,20 +47,12 @@ public class DataChickenModded extends DataChicken {
 		return null;
 	}
 
-	public static void getItemCageSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+	public static void addAllChickens(List<DataChicken> chickens) {
 		for (ChickensRegistryItem item : getChickenRegistryItems()) {
-			ItemStack stack = new ItemStack(itemIn, 1, 0);
-			NBTTagCompound tagCompound = new NBTTagCompound();
-			tagCompound.setString(CHICKEN_ID_KEY, item.getRegistryName().toString());
-			tagCompound.setInteger(GAIN_KEY, 1);
-			tagCompound.setInteger(GROWTH_KEY, 1);
-			tagCompound.setInteger(STRENGTH_KEY, 1);
-			stack.setTagCompound(tagCompound);
-			subItems.add(stack);
+			chickens.add(new DataChickenModded(item, null));
 		}
 	}
 
-	@Optional.Method(modid = "chickens")
 	private static List<ChickensRegistryItem> getChickenRegistryItems() {
 		Comparator<ChickensRegistryItem> comparator = new Comparator<ChickensRegistryItem>() {
 			@Override
@@ -84,20 +76,12 @@ public class DataChickenModded extends DataChicken {
 
 	private int gain = 1;
 	private int growth = 1;
-	private ItemStack item;
-	private int maxLayTime = 12000;
-	private int minLayTime = 6000;
 	private int strength = 1;
-	private int tier = 0;
-	private ResourceLocation registryName;
+	private ChickensRegistryItem chicken;
 
-	private DataChickenModded(ChickensRegistryItem chicken, NBTTagCompound compound) {
-		super(chicken.getEntityName(), "entity." + chicken.getEntityName() + ".name");
-		registryName = chicken.getRegistryName();
-		tier = chicken.getTier();
-		item = chicken.createLayItem();
-		minLayTime = chicken.getMinLayTime();
-		maxLayTime = chicken.getMaxLayTime();
+	private DataChickenModded(ChickensRegistryItem chickenIn, NBTTagCompound compound) {
+		super(chickenIn.getEntityName(), "entity." + chickenIn.getEntityName() + ".name");
+		chicken = chickenIn;
 
 		if (compound != null) {
 			gain = Math.max(1, Math.min(10, compound.getInteger(GAIN_KEY)));
@@ -106,19 +90,47 @@ public class DataChickenModded extends DataChicken {
 		}
 	}
 
+	private String getChickenType() {
+		return chicken.getRegistryName().toString();
+	}
+
 	@Override
 	public void addInfoToTooltip(List<String> tooltip) {
-		tooltip.add(TextFormatting.GRAY + "Tier: " + tier);
-		tooltip.add(TextFormatting.GRAY + "Growth: " + growth);
-		tooltip.add(TextFormatting.GRAY + "Gain: " + gain);
-		tooltip.add(TextFormatting.GRAY + "Strength: " + strength);
+		if (growth > 1 && gain > 1 && strength > 1) {
+			addStatsInfoToTooltip(tooltip);
+		} else {
+			addStatlessInfoToTooltip(tooltip);
+		}
+	}
+
+	private void addStatsInfoToTooltip(List<String> tooltip) {
+		tooltip.add(new TextComponentTranslation("item.roost.chicken.growth", growth).getFormattedText());
+		tooltip.add(new TextComponentTranslation("item.roost.chicken.gain", gain).getFormattedText());
+		tooltip.add(new TextComponentTranslation("item.roost.chicken.strength", strength).getFormattedText());
+	}
+
+	private void addStatlessInfoToTooltip(List<String> tooltip) {
+		ChickensRegistryItem parent1 = chicken.getParent1();
+		ChickensRegistryItem parent2 = chicken.getParent2();
+
+		if (parent1 != null && parent2 != null) {
+			String n1 = new TextComponentTranslation("entity." + parent1.getEntityName() + ".name").getFormattedText();
+			String n2 = new TextComponentTranslation("entity." + parent2.getEntityName() + ".name").getFormattedText();
+			tooltip.add(new TextComponentTranslation("item.roost.chicken.parent1", n1).getFormattedText());
+			tooltip.add(new TextComponentTranslation("item.roost.chicken.parent2", n2).getFormattedText());
+		}
+
+		if (chicken.canSpawn()) {
+			String spawnType = chicken.getSpawnType().name().toLowerCase();
+			tooltip.add(new TextComponentTranslation("item.roost.chicken.spawning." + spawnType).getFormattedText());
+		}
 	}
 
 	@Override
 	public EntityChicken buildEntity(World world) {
 		EntityChickensChicken chicken = new EntityChickensChicken(world);
 		chicken.readEntityFromNBT(createTagCompound());
-		chicken.setChickenType(registryName.toString());
+		chicken.setChickenType(getChickenType());
 		return chicken;
 	}
 
@@ -128,7 +140,7 @@ public class DataChickenModded extends DataChicken {
 		chicken.readEntityFromNBT(createTagCompound());
 		chicken.setPosition(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
 		chicken.onInitialSpawn(world.getDifficultyForLocation(pos), null);
-		chicken.setChickenType(registryName.toString());
+		chicken.setChickenType(getChickenType());
 		chicken.setGrowingAge(getLayTime());
 		world.spawnEntity(chicken);
 	}
@@ -137,14 +149,34 @@ public class DataChickenModded extends DataChicken {
 	public ItemStack buildChickenStack() {
 		ItemStack stack = new ItemStack(RoostItems.ITEM_CHICKEN);
 		NBTTagCompound tagCompound = createTagCompound();
-		tagCompound.setString(CHICKEN_ID_KEY, registryName.toString());
+		tagCompound.setString(CHICKEN_ID_KEY, chicken.getRegistryName().toString());
 		stack.setTagCompound(tagCompound);
 		return stack;
 	}
 
 	@Override
+	public boolean hasParents() {
+		return chicken.getParent1() != null && chicken.getParent2() != null;
+	}
+
+	@Override
+	public List<ItemStack> buildParentChickenStack() {
+		if (!hasParents()) return null;
+		DataChicken parent1 = new DataChickenModded(chicken.getParent1(), null);
+		DataChicken parent2 = new DataChickenModded(chicken.getParent2(), null);
+		return Arrays.asList(parent1.buildChickenStack(), parent2.buildChickenStack());
+	}
+
+	@Override
+	public ItemStack buildCaughtFromStack() {
+		ItemStack stack = new ItemStack(ChickensMod.spawnEgg);
+		ItemSpawnEgg.applyEntityIdToItemStack(stack, chicken.getRegistryName());
+		return stack;
+	}
+
+	@Override
 	public ItemStack createDropStack() {
-		ItemStack stack = item.copy();
+		ItemStack stack = chicken.createLayItem();
 		stack.setCount(gain >= 10 ? 3 : gain >= 5 ? 2 : 1);
 		return stack;
 	}
@@ -164,6 +196,8 @@ public class DataChickenModded extends DataChicken {
 
 	@Override
 	public int getLayTime() {
+		int minLayTime = chicken.getMinLayTime();
+		int maxLayTime = chicken.getMaxLayTime();
 		return minLayTime + rand.nextInt(maxLayTime - minLayTime);
 	}
 
@@ -171,7 +205,7 @@ public class DataChickenModded extends DataChicken {
 	public boolean isEqual(DataChicken other) {
 		if (other instanceof DataChickenModded) {
 			DataChickenModded o = (DataChickenModded) other;
-			return (registryName.equals(o.registryName)) && (growth == o.growth) && (gain == o.gain)
+			return (getChickenType().equals(o.getChickenType())) && (growth == o.growth) && (gain == o.gain)
 					&& (strength == o.strength);
 		}
 		return false;
@@ -179,8 +213,8 @@ public class DataChickenModded extends DataChicken {
 
 	@Override
 	public String toString() {
-		return "DataChickenModded [name=" + getName() + " registryName=" + registryName + ", tier=" + tier + ", gain="
-				+ gain + ", growth=" + growth + ", strength=" + strength + "]";
+		return "DataChickenModded [name=" + getName() + " type=" + getChickenType() + ", gain=" + gain + ", growth="
+				+ growth + ", strength=" + strength + "]";
 	}
 
 	@Override

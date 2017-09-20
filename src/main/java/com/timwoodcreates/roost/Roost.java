@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 @Mod(modid = Roost.MODID, version = Roost.VERSION)
 public class Roost {
 	public static final String MODID = "roost";
+	public static final String NAME = "Roost";
 	public static final String VERSION = "@VERSION@";
 	public static final CreativeTabs TAB = new RoostTab();
 

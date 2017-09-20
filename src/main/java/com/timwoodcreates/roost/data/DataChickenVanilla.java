@@ -1,16 +1,18 @@
 package com.timwoodcreates.roost.data;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.timwoodcreates.roost.RoostItems;
 
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -29,8 +31,8 @@ public class DataChickenVanilla extends DataChicken {
 		return null;
 	}
 
-	public static void getItemCageSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
-		subItems.add(new DataChickenVanilla().buildChickenStack());
+	public static void addAllChickens(List<DataChicken> chickens) {
+		chickens.add(new DataChickenVanilla());
 	}
 
 	public DataChickenVanilla() {
@@ -68,6 +70,23 @@ public class DataChickenVanilla extends DataChicken {
 		NBTTagCompound tagCompound = new NBTTagCompound();
 		tagCompound.setString(CHICKEN_ID_KEY, VANILLA_TYPE);
 		stack.setTagCompound(tagCompound);
+		return stack;
+	}
+
+	@Override
+	public boolean hasParents() {
+		return true;
+	}
+
+	@Override
+	public List<ItemStack> buildParentChickenStack() {
+		return Arrays.asList(buildChickenStack(), buildChickenStack());
+	}
+
+	@Override
+	public ItemStack buildCaughtFromStack() {
+		ItemStack stack = new ItemStack(Items.SPAWN_EGG);
+		ItemMonsterPlacer.applyEntityIdToItemStack(stack, new ResourceLocation("chicken"));
 		return stack;
 	}
 
