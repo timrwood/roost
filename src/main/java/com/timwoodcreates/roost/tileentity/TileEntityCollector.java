@@ -57,7 +57,7 @@ public class TileEntityCollector extends TileEntity implements ISidedInventory, 
 	private boolean pullItemFromSlot(TileEntityRoost tileRoost, int index) {
 		ItemStack itemStack = tileRoost.getStackInSlot(index);
 
-		if (tileRoost.canExtractItem(index, itemStack, null)) {
+		if (!itemStack.isEmpty() && tileRoost.canExtractItem(index, itemStack, null)) {
 			ItemStack itemStack1 = itemStack.copy();
 			ItemStack itemStack2 = TileEntityHopper.putStackInInventoryAllSlots(tileRoost, this,
 					tileRoost.decrStackSize(index, 1), null);
