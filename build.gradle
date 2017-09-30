@@ -32,6 +32,7 @@ minecraft {
     mappings = "snapshot_20161111"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
+    replaceIn "Roost.java"
     replace "@VERSION@", project.version
 }
 
