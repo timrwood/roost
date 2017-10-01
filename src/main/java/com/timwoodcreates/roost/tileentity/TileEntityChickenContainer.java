@@ -42,9 +42,8 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 	}
 
 	private void updateChickenInfoIfNeeded() {
-		if (!mightNeedToUpdateChickenInfo) {
-			return;
-		}
+		if (!mightNeedToUpdateChickenInfo) return;
+
 		boolean fullOfChickensNow = true;
 
 		for (int i = 0; i < chickenData.length; i++) {
@@ -210,11 +209,13 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 
 	@Override
 	public ItemStack decrStackSize(int index, int count) {
+		if (index < getSizeChickenInventory()) mightNeedToUpdateChickenInfo = true;
 		return ItemStackHelper.getAndSplit(inventory, index, count);
 	}
 
 	@Override
 	public ItemStack removeStackFromSlot(int index) {
+		if (index < getSizeChickenInventory()) mightNeedToUpdateChickenInfo = true;
 		return ItemStackHelper.getAndRemove(inventory, index);
 	}
 
@@ -226,9 +227,7 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 			stack.setCount(getInventoryStackLimit());
 		}
 
-		if (index < getSizeChickenInventory()) {
-			mightNeedToUpdateChickenInfo = true;
-		}
+		if (index < getSizeChickenInventory()) mightNeedToUpdateChickenInfo = true;
 	}
 
 	@Override
