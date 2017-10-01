@@ -15,8 +15,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class GuiRoost extends GuiContainer {
 
-	private static final ResourceLocation ROOST_GUI_TEXTURES = new ResourceLocation(Roost.MODID,
-			"textures/gui/roost.png");
+	private static final ResourceLocation ROOST_GUI_TEXTURES = new ResourceLocation(Roost.MODID, "textures/gui/roost.png");
 
 	private final TileEntityRoost roostInventory;
 
@@ -29,8 +28,8 @@ public class GuiRoost extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		fontRendererObj.drawString(roostInventory.getDisplayName().getUnformattedText(), 8, 6, 4210752);
-		fontRendererObj.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, 4210752);
+		fontRenderer.drawString(roostInventory.getDisplayName().getUnformattedText(), 8, 6, 4210752);
+		fontRenderer.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, 4210752);
 		int x = guiLeft;
 		int y = (height - ySize) / 2;
 

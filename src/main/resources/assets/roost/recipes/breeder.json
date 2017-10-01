@@ -1,0 +1,23 @@
+{
+  "result": {
+    "item": "roost:breeder"
+  },
+  "pattern": [
+    "www",
+    "wsw",
+    "hhh"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "w": {
+      "type": "forge:ore_dict",
+      "ore": "plankWood"
+    },
+    "s": {
+      "item": "minecraft:seeds"
+    },
+    "h": {
+      "item": "minecraft:hay_block"
+    }
+  }
+}

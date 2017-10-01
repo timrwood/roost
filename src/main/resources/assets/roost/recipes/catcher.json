@@ -1,0 +1,25 @@
+{
+  "result": {
+    "item": "roost:catcher"
+  },
+  "pattern": [
+    "e",
+    "s",
+    "f"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "e": {
+      "type": "forge:ore_dict",
+      "ore": "egg"
+    },
+    "s": {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    },
+    "f": {
+      "type": "forge:ore_dict",
+      "ore": "feather"
+    }
+  }
+}

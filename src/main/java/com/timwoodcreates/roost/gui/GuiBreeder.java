@@ -15,8 +15,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class GuiBreeder extends GuiContainer {
 
-	private static final ResourceLocation BREEDER_GUI_TEXTURES = new ResourceLocation(Roost.MODID,
-			"textures/gui/breeder.png");
+	private static final ResourceLocation BREEDER_GUI_TEXTURES = new ResourceLocation(Roost.MODID, "textures/gui/breeder.png");
 
 	private final TileEntityBreeder breederInventory;
 
@@ -29,8 +28,8 @@ public class GuiBreeder extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		fontRendererObj.drawString(breederInventory.getDisplayName().getUnformattedText(), 8, 6, 4210752);
-		fontRendererObj.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, 4210752);
+		fontRenderer.drawString(breederInventory.getDisplayName().getUnformattedText(), 8, 6, 4210752);
+		fontRenderer.drawString(I18n.format("container.inventory"), 8, ySize - 96 + 2, 4210752);
 		int x = guiLeft;
 		int y = (height - ySize) / 2;
 

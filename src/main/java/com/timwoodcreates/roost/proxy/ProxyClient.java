@@ -3,30 +3,32 @@ package com.timwoodcreates.roost.proxy;
 import com.timwoodcreates.roost.RoostBlocks;
 import com.timwoodcreates.roost.RoostItems;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
+@Mod.EventBusSubscriber(Side.CLIENT)
 public class ProxyClient extends ProxyCommon {
 
-	@Override
-	public void preInit(FMLPreInitializationEvent e) {
-		super.preInit(e);
+	@SubscribeEvent
+	public static void registerModels(ModelRegistryEvent event) {
+		setModel(RoostBlocks.BLOCK_ROOST);
+		setModel(RoostBlocks.BLOCK_BREEDER);
+		setModel(RoostBlocks.BLOCK_COLLECTOR);
+		setModel(RoostItems.ITEM_CATCHER);
+		setModel(RoostItems.ITEM_CHICKEN);
+	}
 
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(RoostBlocks.BLOCK_ROOST), 0,
-				new ModelResourceLocation("roost:roost", "inventory"));
+	private static void setModel(Block block) {
+		setModel(Item.getItemFromBlock(block));
+	}
 
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(RoostBlocks.BLOCK_BREEDER), 0,
-				new ModelResourceLocation("roost:breeder", "inventory"));
-
-		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(RoostBlocks.BLOCK_COLLECTOR), 0,
-				new ModelResourceLocation("roost:collector", "inventory"));
-
-		ModelLoader.setCustomModelResourceLocation(RoostItems.ITEM_CATCHER, 0,
-				new ModelResourceLocation("roost:catcher", "inventory"));
-
-		ModelLoader.setCustomModelResourceLocation(RoostItems.ITEM_CHICKEN, 0,
-				new ModelResourceLocation("roost:chicken", "inventory"));
+	private static void setModel(Item item) {
+		ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 	}
 }

@@ -1,0 +1,27 @@
+{
+  "result": {
+    "item": "roost:collector"
+  },
+  "pattern": [
+    "wcw",
+    "whw",
+    "wow"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "w": {
+      "type": "forge:ore_dict",
+      "ore": "plankWood"
+    },
+    "c": {
+      "item": "roost:chicken"
+    },
+    "h": {
+      "item": "minecraft:hopper"
+    },
+    "o": {
+      "type": "forge:ore_dict",
+      "ore": "chest"
+    }
+  }
+}

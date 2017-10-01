@@ -63,7 +63,7 @@ public class RoostJEIPlugin extends BlankModPlugin {
 
 	private class ItemChickenSubtypeInterpreter implements ISubtypeInterpreter {
 		@Override
-		public String getSubtypeInfo(ItemStack itemStack) {
+		public String apply(ItemStack itemStack) {
 			NBTTagCompound tagCompound = itemStack.getTagCompound();
 			if (tagCompound == null) return null;
 			return tagCompound.getString(DataChicken.CHICKEN_ID_KEY);

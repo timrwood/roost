@@ -2,11 +2,14 @@ package com.timwoodcreates.roost.item;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.timwoodcreates.roost.data.DataChicken;
 import com.timwoodcreates.roost.data.EnumChickenType;
 import com.timwoodcreates.roost.tileentity.TileEntityRoost;
 
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -37,12 +40,12 @@ public class ItemChicken extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
-		DataChicken.getItemChickenSubItems(itemIn, tab, subItems);
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
+		DataChicken.getItemChickenSubItems(tab, subItems);
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		DataChicken data = DataChicken.getDataFromStack(stack);
 		if (data != null) data.addInfoToTooltip(tooltip);
 	}
@@ -56,8 +59,8 @@ public class ItemChicken extends Item {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand,
-			EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY,
+			float hitZ) {
 		if (!worldIn.isRemote) {
 			TileEntity tileEntity = worldIn.getTileEntity(pos);
 

@@ -58,11 +58,11 @@ public class ContainerRoost extends Container {
 			IContainerListener listener = listeners.get(i);
 
 			if (timeUntilNextDrop != tileRoost.getField(0)) {
-				listener.sendProgressBarUpdate(this, 0, tileRoost.getField(0));
+				listener.sendWindowProperty(this, 0, tileRoost.getField(0));
 			}
 
 			if (timeElapsed != tileRoost.getField(1)) {
-				listener.sendProgressBarUpdate(this, 1, tileRoost.getField(1));
+				listener.sendWindowProperty(this, 1, tileRoost.getField(1));
 			}
 		}
 

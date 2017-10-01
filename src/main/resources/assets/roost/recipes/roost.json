@@ -1,0 +1,20 @@
+{
+  "result": {
+    "item": "roost:roost"
+  },
+  "pattern": [
+    "www",
+    "w w",
+    "hhh"
+  ],
+  "type": "forge:ore_shaped",
+  "key": {
+    "w": {
+      "type": "forge:ore_dict",
+      "ore": "plankWood"
+    },
+    "h": {
+      "item": "minecraft:hay_block"
+    }
+  }
+}

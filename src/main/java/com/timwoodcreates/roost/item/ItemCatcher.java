@@ -28,8 +28,7 @@ public class ItemCatcher extends Item {
 	 */
 	// /summon chickens.ChickensChicken ~ ~ ~ {Type:201,Gain:8,Growth:9,Strength:10}
 	@Override
-	public boolean itemInteractionForEntity(ItemStack itemstack, EntityPlayer player, EntityLivingBase entity,
-			EnumHand hand) {
+	public boolean itemInteractionForEntity(ItemStack itemstack, EntityPlayer player, EntityLivingBase entity, EnumHand hand) {
 		Vec3d pos = new Vec3d(entity.posX, entity.posY, entity.posZ);
 		World world = entity.getEntityWorld();
 
@@ -41,8 +40,7 @@ public class ItemCatcher extends Item {
 			spawnParticles(pos, world);
 		}
 
-		world.playSound(player, entity.posX, entity.posY, entity.posZ, SoundEvents.ENTITY_CHICKEN_HURT,
-				entity.getSoundCategory(), 1.0F, 1.0F);
+		world.playSound(player, entity.posX, entity.posY, entity.posZ, SoundEvents.ENTITY_CHICKEN_HURT, entity.getSoundCategory(), 1.0F, 1.0F);
 
 		itemstack.damageItem(1, player);
 
@@ -69,14 +67,13 @@ public class ItemCatcher extends Item {
 		Random rand = new Random();
 
 		for (int k = 0; k < 20; ++k) {
-			double xCoord = pos.xCoord + (rand.nextDouble() * 0.6D) - 0.3D;
-			double yCoord = pos.yCoord + (rand.nextDouble() * 0.6D);
-			double zCoord = pos.zCoord + (rand.nextDouble() * 0.6D) - 0.3D;
+			double xCoord = pos.x + (rand.nextDouble() * 0.6D) - 0.3D;
+			double yCoord = pos.y + (rand.nextDouble() * 0.6D);
+			double zCoord = pos.z + (rand.nextDouble() * 0.6D) - 0.3D;
 			double xSpeed = rand.nextGaussian() * 0.02D;
 			double ySpeed = rand.nextGaussian() * 0.2D;
 			double zSpeed = rand.nextGaussian() * 0.02D;
-			world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed,
-					new int[0]);
+			world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed, new int[0]);
 		}
 	}
 

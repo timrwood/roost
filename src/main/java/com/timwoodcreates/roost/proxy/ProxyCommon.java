@@ -1,5 +1,8 @@
 package com.timwoodcreates.roost.proxy;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import com.timwoodcreates.roost.Roost;
 import com.timwoodcreates.roost.RoostBlocks;
 import com.timwoodcreates.roost.RoostItems;
@@ -9,19 +12,24 @@ import com.timwoodcreates.roost.tileentity.TileEntityCollector;
 import com.timwoodcreates.roost.tileentity.TileEntityRoost;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
+@Mod.EventBusSubscriber
 public class ProxyCommon {
+
+	private static List<Block> blocksToRegister = new LinkedList<Block>();
+	private static List<Item> itemsToRegister = new LinkedList<Item>();
 
 	public void preInit(FMLPreInitializationEvent e) {
 		NetworkRegistry.INSTANCE.registerGuiHandler(Roost.INSTANCE, new GuiHandler());
@@ -30,6 +38,20 @@ public class ProxyCommon {
 		registerItems();
 		registerTileEntities();
 		registerRecipies();
+	}
+
+	@SubscribeEvent
+	public static void registerBlocks(RegistryEvent.Register<Block> event) {
+		for (Block block : blocksToRegister) {
+			event.getRegistry().register(block);
+		}
+	}
+
+	@SubscribeEvent
+	public static void registerItems(RegistryEvent.Register<Item> event) {
+		for (Item item : itemsToRegister) {
+			event.getRegistry().register(item);
+		}
 	}
 
 	private void registerBlocks() {
@@ -51,39 +73,25 @@ public class ProxyCommon {
 
 	private void registerRecipies() {
 		GameRegistry.addSmelting(RoostItems.ITEM_CHICKEN, new ItemStack(Items.COOKED_CHICKEN), 0.35f);
-		registerShapedRecipe(RoostBlocks.BLOCK_ROOST, "WWW", "W W", "HHH", 'W', "plankWood", 'H', Blocks.HAY_BLOCK);
-		registerShapedRecipe(RoostBlocks.BLOCK_BREEDER, "WWW", "WSW", "HHH", 'W', "plankWood", 'H', Blocks.HAY_BLOCK,
-				'S', Items.WHEAT_SEEDS);
-		registerShapedRecipe(RoostBlocks.BLOCK_COLLECTOR, "WCW", "WHW", "WOW", 'W', "plankWood", 'C',
-				RoostItems.ITEM_CHICKEN, 'H', Blocks.HOPPER, 'O', "chest");
-		registerShapedRecipe(RoostItems.ITEM_CATCHER, "E", "S", "F", 'E', "egg", 'S', "stickWood", 'F', "feather");
-	}
-
-	private void registerShapedRecipe(Block block, Object... recipe) {
-		GameRegistry.addRecipe(new ShapedOreRecipe(block, recipe));
-	}
-
-	private void registerShapedRecipe(Item item, Object... recipe) {
-		GameRegistry.addRecipe(new ShapedOreRecipe(item, recipe));
 	}
 
 	private void registerBlock(Block block, String name) {
 		block.setUnlocalizedName(Roost.MODID + "." + name);
 		block.setRegistryName(new ResourceLocation(Roost.MODID, name));
 		block.setCreativeTab(Roost.TAB);
-		GameRegistry.register(block);
+		blocksToRegister.add(block);
 
 		ItemBlock item = new ItemBlock(block);
 		item.setUnlocalizedName(block.getUnlocalizedName());
 		item.setRegistryName(block.getRegistryName());
-		GameRegistry.register(item);
+		itemsToRegister.add(item);
 	}
 
 	private void registerItem(Item item, String name) {
 		item.setUnlocalizedName(Roost.MODID + "." + name);
 		item.setRegistryName(new ResourceLocation(Roost.MODID, name));
 		item.setCreativeTab(Roost.TAB);
-		GameRegistry.register(item);
+		itemsToRegister.add(item);
 	}
 
 	private void registerTileEntity(Class<? extends TileEntity> tile, String name) {

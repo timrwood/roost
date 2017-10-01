@@ -61,11 +61,11 @@ public class ContainerBreeder extends Container {
 			IContainerListener listener = listeners.get(i);
 
 			if (timeUntilNextDrop != breederInventory.getField(0)) {
-				listener.sendProgressBarUpdate(this, 0, breederInventory.getField(0));
+				listener.sendWindowProperty(this, 0, breederInventory.getField(0));
 			}
 
 			if (timeElapsed != breederInventory.getField(1)) {
-				listener.sendProgressBarUpdate(this, 1, breederInventory.getField(1));
+				listener.sendWindowProperty(this, 1, breederInventory.getField(1));
 			}
 		}
 
