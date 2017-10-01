@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.setycz.chickens.ChickensMod;
 import com.setycz.chickens.entity.EntityChickensChicken;
+import com.setycz.chickens.handler.SpawnType;
 import com.setycz.chickens.item.ItemSpawnEgg;
 import com.setycz.chickens.registry.ChickensRegistry;
 import com.setycz.chickens.registry.ChickensRegistryItem;
@@ -120,7 +121,7 @@ public class DataChickenModded extends DataChicken {
 			tooltip.add(new TextComponentTranslation("item.roost.chicken.parent2", n2).getFormattedText());
 		}
 
-		if (chicken.canSpawn()) {
+		if (chicken.canSpawn() && chicken.getSpawnType() != SpawnType.NONE) {
 			String spawnType = chicken.getSpawnType().name().toLowerCase();
 			tooltip.add(new TextComponentTranslation("item.roost.chicken.spawning." + spawnType).getFormattedText());
 		}
