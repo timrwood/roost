@@ -14,7 +14,8 @@
       "ore": "plankWood"
     },
     "c": {
-      "item": "roost:chicken"
+      "item": "roost:chicken",
+      "data": 0
     },
     "h": {
       "item": "minecraft:hopper"

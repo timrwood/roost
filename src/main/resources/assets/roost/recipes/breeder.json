@@ -14,7 +14,7 @@
       "ore": "plankWood"
     },
     "s": {
-      "item": "minecraft:seeds"
+      "item": "minecraft:wheat_seeds"
     },
     "h": {
       "item": "minecraft:hay_block"
