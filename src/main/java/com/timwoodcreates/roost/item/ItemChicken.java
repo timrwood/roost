@@ -41,7 +41,9 @@ public class ItemChicken extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
-		DataChicken.getItemChickenSubItems(tab, subItems);
+		if (isInCreativeTab(tab)) {
+			DataChicken.getItemChickenSubItems(tab, subItems);
+		}
 	}
 
 	@Override
