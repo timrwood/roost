@@ -53,7 +53,7 @@ repositories {
 }
 
 dependencies {
-    // deobfCompile "chickens:chickens:${chickens_version}"
+    deobfCompile "chickens:chickens:${chickens_version}"
     deobfCompile "mezz.jei:${jei_version}"
     deobfCompile "mcp.mobius.waila:Hwyla:${hwyla_version}"
 }

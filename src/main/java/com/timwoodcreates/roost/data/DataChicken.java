@@ -15,6 +15,7 @@ import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Loader;
 
 public class DataChicken {
 
@@ -24,8 +25,7 @@ public class DataChicken {
 	public static List<DataChicken> getAllChickens() {
 		List<DataChicken> chickens = new LinkedList<DataChicken>();
 		DataChickenVanilla.addAllChickens(chickens);
-		// if (Loader.isModLoaded("chickens"))
-		// DataChickenModded.addAllChickens(chickens);
+		if (Loader.isModLoaded("chickens")) DataChickenModded.addAllChickens(chickens);
 		return chickens;
 	}
 
@@ -34,8 +34,7 @@ public class DataChicken {
 
 		DataChicken data = null;
 
-		// if (Loader.isModLoaded("chickens")) data =
-		// DataChickenModded.getDataFromEntity(entity);
+		if (Loader.isModLoaded("chickens")) data = DataChickenModded.getDataFromEntity(entity);
 
 		if (data == null) data = DataChickenVanilla.getDataFromEntity(entity);
 
@@ -47,8 +46,7 @@ public class DataChicken {
 
 		DataChicken data = null;
 
-		// if (Loader.isModLoaded("chickens")) data =
-		// DataChickenModded.getDataFromStack(stack);
+		if (Loader.isModLoaded("chickens")) data = DataChickenModded.getDataFromStack(stack);
 
 		if (data == null) data = DataChickenVanilla.getDataFromStack(stack);
 
