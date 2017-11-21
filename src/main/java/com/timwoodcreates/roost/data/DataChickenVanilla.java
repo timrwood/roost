@@ -26,6 +26,11 @@ public class DataChickenVanilla extends DataChicken {
 		return new DataChickenVanilla();
 	}
 
+	public static DataChicken getDataFromTooltipNBT(NBTTagCompound tagCompound) {
+		if (tagCompound == null || !tagCompound.getString(CHICKEN_ID_KEY).equals(VANILLA_TYPE)) return null;
+		return new DataChickenVanilla();
+	}
+
 	public static DataChicken getDataFromEntity(Entity entity) {
 		if (entity instanceof EntityChicken) return new DataChickenVanilla();
 		return null;
@@ -71,6 +76,13 @@ public class DataChickenVanilla extends DataChicken {
 		tagCompound.setString(CHICKEN_ID_KEY, VANILLA_TYPE);
 		stack.setTagCompound(tagCompound);
 		return stack;
+	}
+
+	@Override
+	public NBTTagCompound buildTooltipNBT() {
+		NBTTagCompound tagCompound = new NBTTagCompound();
+		tagCompound.setString(CHICKEN_ID_KEY, VANILLA_TYPE);
+		return tagCompound;
 	}
 
 	@Override

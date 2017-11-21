@@ -56,16 +56,21 @@ public class TileEntityBreeder extends TileEntityChickenContainer {
 	private void spawnParticle(double x, double z, double xOffset, double zOffset) {
 		if (getWorld() instanceof WorldServer) {
 			WorldServer worldServer = (WorldServer) getWorld();
-			worldServer.spawnParticle(EnumParticleTypes.HEART, pos.getX() + x, pos.getY() + 0.5d, pos.getZ() + z, 2,
-					xOffset, 0.2d, zOffset, 0.02D);
+			worldServer.spawnParticle(EnumParticleTypes.HEART, pos.getX() + x, pos.getY() + 0.5d, pos.getZ() + z, 2, xOffset, 0.2d, zOffset, 0.02D);
 		}
 	}
 
 	public void addInfoToTooltip(List<String> tooltip, NBTTagCompound tag) {
-		if (tag.hasKey(CHICKEN_0_KEY)) tooltip.add(tag.getString(CHICKEN_0_KEY));
-		if (tag.hasKey(CHICKEN_1_KEY)) tooltip.add(tag.getString(CHICKEN_1_KEY));
+		if (tag.hasKey(CHICKEN_0_KEY)) {
+			DataChicken chicken = DataChicken.getDataFromTooltipNBT(tag.getCompoundTag(CHICKEN_0_KEY));
+			tooltip.add(chicken.getDisplaySummary());
+		}
+		if (tag.hasKey(CHICKEN_1_KEY)) {
+			DataChicken chicken = DataChicken.getDataFromTooltipNBT(tag.getCompoundTag(CHICKEN_1_KEY));
+			tooltip.add(chicken.getDisplaySummary());
+		}
 		if (tag.hasKey(COMPLETE_KEY)) {
-			tooltip.add("Progress: " + tag.getString(COMPLETE_KEY));
+			tooltip.add(new TextComponentTranslation("container.roost.progress", formatProgress(tag.getDouble(COMPLETE_KEY))).getFormattedText());
 			if (!tag.getBoolean(HAS_SEEDS_KEY)) {
 				tooltip.add(TextFormatting.RED + I18n.format("container.roost.breeder.seedless"));
 			}
@@ -75,10 +80,10 @@ public class TileEntityBreeder extends TileEntityChickenContainer {
 	public void storeInfoForTooltip(NBTTagCompound tag) {
 		DataChicken chicken0 = getChickenData(0);
 		DataChicken chicken1 = getChickenData(1);
-		if (chicken0 != null) tag.setString(CHICKEN_0_KEY, chicken0.getDisplaySummary());
-		if (chicken1 != null) tag.setString(CHICKEN_1_KEY, chicken1.getDisplaySummary());
+		if (chicken0 != null) tag.setTag(CHICKEN_0_KEY, chicken0.buildTooltipNBT());
+		if (chicken1 != null) tag.setTag(CHICKEN_1_KEY, chicken1.buildTooltipNBT());
 		if (chicken0 != null && chicken1 != null) {
-			tag.setString(COMPLETE_KEY, getFormattedProgress());
+			tag.setDouble(COMPLETE_KEY, getProgress());
 			tag.setBoolean(HAS_SEEDS_KEY, hasEnoughSeeds());
 		}
 	}

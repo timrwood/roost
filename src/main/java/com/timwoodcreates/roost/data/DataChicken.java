@@ -13,6 +13,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Loader;
@@ -27,6 +28,18 @@ public class DataChicken {
 		DataChickenVanilla.addAllChickens(chickens);
 		if (Loader.isModLoaded("chickens")) DataChickenModded.addAllChickens(chickens);
 		return chickens;
+	}
+
+	public static DataChicken getDataFromTooltipNBT(NBTTagCompound tag) {
+		if (tag == null) return null;
+
+		DataChicken data = null;
+
+		if (Loader.isModLoaded("chickens")) data = DataChickenModded.getDataFromTooltipNBT(tag);
+
+		if (data == null) data = DataChickenVanilla.getDataFromTooltipNBT(tag);
+
+		return data;
 	}
 
 	public static DataChicken getDataFromEntity(Entity entity) {
@@ -96,6 +109,10 @@ public class DataChicken {
 	}
 
 	public EntityChicken buildEntity(World world) {
+		return null;
+	}
+
+	public NBTTagCompound buildTooltipNBT() {
 		return null;
 	}
 

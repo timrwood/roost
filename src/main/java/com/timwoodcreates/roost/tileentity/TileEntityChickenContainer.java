@@ -102,7 +102,11 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 	}
 
 	public String getFormattedProgress() {
-		return FORMATTER.format(getProgress());
+		return formatProgress(getProgress());
+	}
+
+	public String formatProgress(double progress) {
+		return FORMATTER.format(progress);
 	}
 
 	private void spawnChickenDropIfNeeded() {
@@ -271,8 +275,7 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 
 	public static boolean isSeed(ItemStack stack) {
 		Item item = stack.getItem();
-		return (item == Items.WHEAT_SEEDS || item == Items.MELON_SEEDS || item == Items.PUMPKIN_SEEDS
-				|| item == Items.BEETROOT_SEEDS);
+		return (item == Items.WHEAT_SEEDS || item == Items.MELON_SEEDS || item == Items.PUMPKIN_SEEDS || item == Items.BEETROOT_SEEDS);
 	}
 
 	@Override

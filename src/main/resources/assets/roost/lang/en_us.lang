@@ -6,6 +6,7 @@ container.roost.breeder=Chicken Breeder
 container.roost.breeder.seedless=No Seeds
 container.roost.collector=Roost Collector
 container.roost.roost=Roost
+container.roost.progress=Progress: %s
 
 gui.jei.roost.category.breeding=Breeding Chickens
 gui.jei.roost.category.catching=Catching Chickens

@@ -93,15 +93,21 @@ public class TileEntityRoost extends TileEntityChickenContainer {
 	}
 
 	public void addInfoToTooltip(List<String> tooltip, NBTTagCompound tag) {
-		if (tag.hasKey(CHICKEN_KEY)) tooltip.add(tag.getString(CHICKEN_KEY));
-		if (tag.hasKey(COMPLETE_KEY)) tooltip.add("Progress: " + tag.getString(COMPLETE_KEY));
+		if (tag.hasKey(CHICKEN_KEY)) {
+			DataChicken chicken = DataChicken.getDataFromTooltipNBT(tag.getCompoundTag(CHICKEN_KEY));
+			tooltip.add(chicken.getDisplaySummary());
+		}
+
+		if (tag.hasKey(COMPLETE_KEY)) {
+			tooltip.add(new TextComponentTranslation("container.roost.progress", formatProgress(tag.getDouble(COMPLETE_KEY))).getFormattedText());
+		}
 	}
 
 	public void storeInfoForTooltip(NBTTagCompound tag) {
 		DataChicken chicken = getChickenData(CHICKEN_SLOT);
 		if (chicken == null) return;
-		tag.setString(CHICKEN_KEY, chicken.getDisplaySummary());
-		tag.setString(COMPLETE_KEY, getFormattedProgress());
+		tag.setTag(CHICKEN_KEY, chicken.buildTooltipNBT());
+		tag.setDouble(COMPLETE_KEY, getProgress());
 	}
 
 	@Override

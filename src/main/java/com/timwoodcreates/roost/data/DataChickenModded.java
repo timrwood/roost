@@ -41,6 +41,12 @@ public class DataChickenModded extends DataChicken {
 		return null;
 	}
 
+	public static DataChicken getDataFromTooltipNBT(NBTTagCompound tagCompound) {
+		ChickensRegistryItem chicken = ChickensRegistry.getByRegistryName(tagCompound.getString(CHICKEN_ID_KEY));
+		if (chicken != null) return new DataChickenModded(chicken, tagCompound);
+		return null;
+	}
+
 	public static DataChicken getDataFromStack(ItemStack stack) {
 		ChickensRegistryItem chicken = chickensRegistryItemForStack(stack);
 		if (chicken != null) return new DataChickenModded(chicken, stack.getTagCompound());
@@ -125,6 +131,13 @@ public class DataChickenModded extends DataChicken {
 			String spawnType = chicken.getSpawnType().name().toLowerCase();
 			tooltip.add(new TextComponentTranslation("item.roost.chicken.spawning." + spawnType).getFormattedText());
 		}
+	}
+
+	@Override
+	public NBTTagCompound buildTooltipNBT() {
+		NBTTagCompound tagCompound = createTagCompound();
+		tagCompound.setString(CHICKEN_ID_KEY, chicken.getRegistryName().toString());
+		return tagCompound;
 	}
 
 	@Override
