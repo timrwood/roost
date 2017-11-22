@@ -1,5 +1,7 @@
 package com.timwoodcreates.roost.tileentity;
 
+import javax.annotation.Nullable;
+
 import com.timwoodcreates.roost.Roost;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,6 +17,10 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
 
 public class TileEntityCollector extends TileEntity implements ISidedInventory, ITickable {
 
@@ -202,6 +208,24 @@ public class TileEntityCollector extends TileEntity implements ISidedInventory, 
 		super.writeToNBT(compound);
 		ItemStackHelper.saveAllItems(compound, inventory);
 		return compound;
+	}
+
+	private IItemHandler itemHandler;
+
+	@SuppressWarnings("unchecked")
+	@Override
+	@Nullable
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+			if (itemHandler == null) itemHandler = new InvWrapper(this);
+			return (T) itemHandler;
+		}
+		return super.getCapability(capability, facing);
+	}
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 
 }

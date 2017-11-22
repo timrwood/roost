@@ -2,6 +2,8 @@ package com.timwoodcreates.roost.tileentity;
 
 import java.text.DecimalFormat;
 
+import javax.annotation.Nullable;
+
 import com.timwoodcreates.roost.data.DataChicken;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,6 +17,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
 
 public abstract class TileEntityChickenContainer extends TileEntity implements ISidedInventory, ITickable {
 
@@ -341,6 +347,24 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 		compound.setInteger("TimeUntilNextChild", timeUntilNextDrop);
 		compound.setInteger("TimeElapsed", timeElapsed);
 		return compound;
+	}
+
+	private IItemHandler itemHandler;
+
+	@SuppressWarnings("unchecked")
+	@Override
+	@Nullable
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+			if (itemHandler == null) itemHandler = new InvWrapper(this);
+			return (T) itemHandler;
+		}
+		return super.getCapability(capability, facing);
+	}
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 
 }
