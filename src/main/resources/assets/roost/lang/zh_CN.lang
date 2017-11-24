@@ -6,6 +6,7 @@ container.roost.breeder=繁殖箱
 container.roost.breeder.seedless=没有种子
 container.roost.collector=收集器
 container.roost.roost=鸡窝
+container.roost.progress=进度：%s
 
 gui.jei.roost.category.breeding=繁殖鸡
 gui.jei.roost.category.catching=捕捉鸡
