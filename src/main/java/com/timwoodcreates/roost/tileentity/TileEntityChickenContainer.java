@@ -20,7 +20,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.wrapper.InvWrapper;
+import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 public abstract class TileEntityChickenContainer extends TileEntity implements ISidedInventory, ITickable {
 
@@ -356,7 +356,7 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 	@Nullable
 	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
 		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-			if (itemHandler == null) itemHandler = new InvWrapper(this);
+			if (itemHandler == null) itemHandler = new SidedInvWrapper(this, EnumFacing.DOWN);
 			return (T) itemHandler;
 		}
 		return super.getCapability(capability, facing);
