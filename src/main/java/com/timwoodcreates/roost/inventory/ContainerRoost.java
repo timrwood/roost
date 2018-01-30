@@ -16,8 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ContainerRoost extends Container {
 
 	private final IInventory tileRoost;
-	private int timeUntilNextDrop;
-	private int timeElapsed;
+	private int progress;
 
 	public ContainerRoost(InventoryPlayer playerInventory, IInventory roostInventory) {
 		this.tileRoost = roostInventory;
@@ -57,17 +56,12 @@ public class ContainerRoost extends Container {
 		for (int i = 0; i < listeners.size(); ++i) {
 			IContainerListener listener = listeners.get(i);
 
-			if (timeUntilNextDrop != tileRoost.getField(0)) {
+			if (progress != tileRoost.getField(0)) {
 				listener.sendWindowProperty(this, 0, tileRoost.getField(0));
-			}
-
-			if (timeElapsed != tileRoost.getField(1)) {
-				listener.sendWindowProperty(this, 1, tileRoost.getField(1));
 			}
 		}
 
-		timeUntilNextDrop = tileRoost.getField(0);
-		timeElapsed = tileRoost.getField(1);
+		progress = tileRoost.getField(0);
 	}
 
 	@Override

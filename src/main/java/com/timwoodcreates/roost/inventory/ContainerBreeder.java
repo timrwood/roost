@@ -17,8 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ContainerBreeder extends Container {
 
 	private final IInventory breederInventory;
-	private int timeUntilNextDrop;
-	private int timeElapsed;
+	private int progress;
 
 	public ContainerBreeder(InventoryPlayer playerInventory, IInventory breederInventory) {
 		this.breederInventory = breederInventory;
@@ -60,17 +59,12 @@ public class ContainerBreeder extends Container {
 		for (int i = 0; i < listeners.size(); ++i) {
 			IContainerListener listener = listeners.get(i);
 
-			if (timeUntilNextDrop != breederInventory.getField(0)) {
+			if (progress != breederInventory.getField(0)) {
 				listener.sendWindowProperty(this, 0, breederInventory.getField(0));
-			}
-
-			if (timeElapsed != breederInventory.getField(1)) {
-				listener.sendWindowProperty(this, 1, breederInventory.getField(1));
 			}
 		}
 
-		timeUntilNextDrop = breederInventory.getField(0);
-		timeElapsed = breederInventory.getField(1);
+		progress = breederInventory.getField(0);
 	}
 
 	@Override

@@ -36,6 +36,7 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 	private boolean skipNextTimerReset = false;
 	private int timeUntilNextDrop = 0;
 	private int timeElapsed = 0;
+	private int progress = 0; // 0 - 1000
 
 	private DataChicken[] chickenData = new DataChicken[getSizeChickenInventory()];
 	private boolean fullOfChickens = false;
@@ -49,6 +50,7 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 			updateChickenInfoIfNeeded();
 			updateTimerIfNeeded();
 			spawnChickenDropIfNeeded();
+			updateProgress();
 			skipNextTimerReset = false;
 		}
 	}
@@ -99,6 +101,10 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 		}
 	}
 
+	private void updateProgress() {
+		progress = timeUntilNextDrop == 0 ? 0 : (timeElapsed * 1000 / timeUntilNextDrop);
+	}
+
 	private int getTimeElapsed() {
 		int time = Integer.MAX_VALUE;
 		for (int i = 0; i < chickenData.length; i++) {
@@ -109,7 +115,7 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 	}
 
 	public double getProgress() {
-		return timeUntilNextDrop == 0 ? 0 : (double) timeElapsed / (double) timeUntilNextDrop;
+		return progress / 1000.0;
 	}
 
 	public String getFormattedProgress() {
@@ -314,9 +320,7 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 	public int getField(int id) {
 		switch (id) {
 		case 0:
-			return timeUntilNextDrop;
-		case 1:
-			return timeElapsed;
+			return progress;
 		default:
 			return 0;
 		}
@@ -326,10 +330,7 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 	public void setField(int id, int value) {
 		switch (id) {
 		case 0:
-			timeUntilNextDrop = value;
-			break;
-		case 1:
-			timeElapsed = value;
+			progress = value;
 			break;
 		}
 	}
