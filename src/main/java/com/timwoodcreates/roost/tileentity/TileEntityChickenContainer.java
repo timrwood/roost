@@ -88,7 +88,7 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 	}
 
 	private void updateTimerIfNeeded() {
-		if (fullOfChickens && hasEnoughSeeds()) {
+		if (fullOfChickens && hasEnoughSeeds() && !outputIsFull()) {
 			timeElapsed += getTimeElapsed();
 			markDirty();
 		}
@@ -143,6 +143,16 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 	protected abstract int getSizeChickenInventory();
 
 	protected abstract int requiredSeedsForDrop();
+
+	private boolean outputIsFull() {
+		int max = getSizeInventory();
+
+		for (int i = getOutputStackIndex(); i < max; i++) {
+			ItemStack stack = getStackInSlot(i);
+			if (stack.getCount() < stack.getMaxStackSize()) return false;
+		}
+		return true;
+	}
 
 	protected boolean hasEnoughSeeds() {
 		int needed = requiredSeedsForDrop();
