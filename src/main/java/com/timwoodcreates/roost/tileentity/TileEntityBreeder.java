@@ -27,8 +27,8 @@ public class TileEntityBreeder extends TileEntityChickenContainer {
 	private static final String HAS_SEEDS_KEY = "HasSeeds";
 
 	@Override
-	protected void isFullOfChickensChanged(boolean isFull) {
-		BlockBreeder.setIsBreedingState(isFull, getWorld(), pos);
+	protected void updateBlockState() {
+		BlockBreeder.setBlockState(isFullOfChickens(), isFullOfSeeds(), getWorld(), pos);
 	}
 
 	@Override

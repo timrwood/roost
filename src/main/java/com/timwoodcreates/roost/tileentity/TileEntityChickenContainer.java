@@ -34,16 +34,26 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 
 	private DataChicken[] chickenData = new DataChicken[getSizeChickenInventory()];
 	private boolean fullOfChickens = false;
+	private boolean fullOfSeeds = false;
 
 	// Update
 
 	@Override
 	public void update() {
 		if (!getWorld().isRemote) {
+			updateHasSeedsInfo();
 			updateChickenInfoIfNeeded();
 			updateTimerIfNeeded();
 			spawnChickenDropIfNeeded();
 			skipNextTimerReset = false;
+		}
+	}
+
+	private void updateHasSeedsInfo() {
+		boolean fullOfSeedsNow = hasEnoughSeeds();
+		if (fullOfSeedsNow != fullOfSeeds) {
+			fullOfSeeds = fullOfSeedsNow;
+			updateBlockState();
 		}
 	}
 
@@ -59,7 +69,7 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 
 		if (fullOfChickensNow != fullOfChickens) {
 			fullOfChickens = fullOfChickensNow;
-			isFullOfChickensChanged(fullOfChickens);
+			updateBlockState();
 		}
 		mightNeedToUpdateChickenInfo = false;
 	}
@@ -88,7 +98,7 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 	}
 
 	private void updateTimerIfNeeded() {
-		if (fullOfChickens && hasEnoughSeeds() && !outputIsFull()) {
+		if (fullOfChickens && fullOfSeeds && !outputIsFull()) {
 			timeElapsed += getTimeElapsed();
 			markDirty();
 		}
@@ -136,13 +146,21 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 		markDirty();
 	}
 
-	protected abstract void isFullOfChickensChanged(boolean isFull);
+	protected abstract void updateBlockState();
 
 	protected abstract void spawnChickenDrop();
 
 	protected abstract int getSizeChickenInventory();
 
 	protected abstract int requiredSeedsForDrop();
+
+	protected boolean isFullOfChickens() {
+		return fullOfChickens;
+	}
+
+	protected boolean isFullOfSeeds() {
+		return fullOfSeeds;
+	}
 
 	private boolean outputIsFull() {
 		int max = getSizeInventory();

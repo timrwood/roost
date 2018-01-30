@@ -25,7 +25,7 @@ public class TileEntityRoost extends TileEntityChickenContainer {
 	private static int CHICKEN_SLOT = 0;
 
 	@Override
-	protected void isFullOfChickensChanged(boolean isFull) {
+	protected void updateBlockState() {
 		notifyBlockUpdate();
 	}
 

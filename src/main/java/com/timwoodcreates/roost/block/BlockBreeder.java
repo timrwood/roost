@@ -23,6 +23,7 @@ public class BlockBreeder extends BlockContainer {
 
 	private static boolean keepInventory;
 	public static final PropertyBool IS_BREEDING = PropertyBool.create("is_breeding");
+	public static final PropertyBool HAS_SEEDS = PropertyBool.create("has_seeds");
 
 	public BlockBreeder() {
 		super(Material.WOOD);
@@ -30,12 +31,12 @@ public class BlockBreeder extends BlockContainer {
 		setHardness(2.0F);
 		setResistance(5.0F);
 		setSoundType(SoundType.WOOD);
-		setDefaultState(blockState.getBaseState().withProperty(IS_BREEDING, false));
+		setDefaultState(blockState.getBaseState().withProperty(IS_BREEDING, false).withProperty(HAS_SEEDS, false));
 	}
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, IS_BREEDING);
+		return new BlockStateContainer(this, IS_BREEDING, HAS_SEEDS);
 	}
 
 	@Override
@@ -44,8 +45,8 @@ public class BlockBreeder extends BlockContainer {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX,
+			float hitY, float hitZ) {
 		if (worldIn.isRemote) {
 			return true;
 		}
@@ -89,12 +90,13 @@ public class BlockBreeder extends BlockContainer {
 		return state.getValue(IS_BREEDING);
 	}
 
-	public static void setIsBreedingState(boolean isBreeding, World worldIn, BlockPos pos) {
+	public static void setBlockState(boolean isBreeding, boolean hasSeeds, World worldIn, BlockPos pos) {
 		IBlockState state = worldIn.getBlockState(pos);
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
 		keepInventory = true;
 
-		worldIn.setBlockState(pos, state.withProperty(IS_BREEDING, isBreeding), 3);
+		state = state.withProperty(IS_BREEDING, isBreeding).withProperty(HAS_SEEDS, hasSeeds);
+		worldIn.setBlockState(pos, state, 3);
 
 		keepInventory = false;
 
