@@ -3,20 +3,16 @@ package com.timwoodcreates.roost.tileentity;
 import java.util.List;
 
 import com.timwoodcreates.roost.Roost;
-import com.timwoodcreates.roost.block.BlockBreeder;
 import com.timwoodcreates.roost.data.DataChicken;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
 public class TileEntityBreeder extends TileEntityChickenContainer {
@@ -25,11 +21,6 @@ public class TileEntityBreeder extends TileEntityChickenContainer {
 	private static final String CHICKEN_1_KEY = "Chicken1";
 	private static final String COMPLETE_KEY = "Complete";
 	private static final String HAS_SEEDS_KEY = "HasSeeds";
-
-	@Override
-	protected void updateBlockState() {
-		BlockBreeder.setBlockState(isFullOfChickens(), isFullOfSeeds(), getWorld(), pos);
-	}
 
 	@Override
 	protected void spawnChickenDrop() {
@@ -84,13 +75,8 @@ public class TileEntityBreeder extends TileEntityChickenContainer {
 		if (chicken1 != null) tag.setTag(CHICKEN_1_KEY, chicken1.buildTooltipNBT());
 		if (chicken0 != null && chicken1 != null) {
 			tag.setDouble(COMPLETE_KEY, getProgress());
-			tag.setBoolean(HAS_SEEDS_KEY, hasEnoughSeeds());
+			tag.setBoolean(HAS_SEEDS_KEY, isFullOfSeeds());
 		}
-	}
-
-	@Override
-	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
-		return (oldState.getBlock() != newState.getBlock());
 	}
 
 	@Override

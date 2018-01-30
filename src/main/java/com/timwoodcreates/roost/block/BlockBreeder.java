@@ -17,11 +17,13 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ChunkCache;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 
 public class BlockBreeder extends BlockContainer {
 
-	private static boolean keepInventory;
 	public static final PropertyBool IS_BREEDING = PropertyBool.create("is_breeding");
 	public static final PropertyBool HAS_SEEDS = PropertyBool.create("has_seeds");
 
@@ -64,12 +66,10 @@ public class BlockBreeder extends BlockContainer {
 
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-		if (!keepInventory) {
-			TileEntity tileEntity = worldIn.getTileEntity(pos);
+		TileEntity tileEntity = worldIn.getTileEntity(pos);
 
-			if (tileEntity instanceof TileEntityBreeder) {
-				InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityBreeder) tileEntity);
-			}
+		if (tileEntity instanceof TileEntityBreeder) {
+			InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityBreeder) tileEntity);
 		}
 
 		super.breakBlock(worldIn, pos, state);
@@ -90,29 +90,20 @@ public class BlockBreeder extends BlockContainer {
 		return state.getValue(IS_BREEDING);
 	}
 
-	public static void setBlockState(boolean isBreeding, boolean hasSeeds, World worldIn, BlockPos pos) {
-		IBlockState state = worldIn.getBlockState(pos);
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
-		keepInventory = true;
-
-		state = state.withProperty(IS_BREEDING, isBreeding).withProperty(HAS_SEEDS, hasSeeds);
-		worldIn.setBlockState(pos, state, 3);
-
-		keepInventory = false;
-
-		if (tileEntity != null) {
-			tileEntity.validate();
-			worldIn.setTileEntity(pos, tileEntity);
-		}
-	}
-
-	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(IS_BREEDING, (meta & 1) == 1);
-	}
-
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(IS_BREEDING) ? 1 : 0;
+		return 0;
+	}
+
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		TileEntity tileEntity = worldIn instanceof ChunkCache ? ((ChunkCache) worldIn).getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK)
+				: worldIn.getTileEntity(pos);
+
+		if (tileEntity instanceof TileEntityBreeder) {
+			TileEntityBreeder tileEntityBreeder = (TileEntityBreeder) tileEntity;
+			return state.withProperty(IS_BREEDING, tileEntityBreeder.isFullOfChickens()).withProperty(HAS_SEEDS, tileEntityBreeder.isFullOfSeeds());
+		}
+		return state;
 	}
 }

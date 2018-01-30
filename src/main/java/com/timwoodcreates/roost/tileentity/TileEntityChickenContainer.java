@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import com.timwoodcreates.roost.data.DataChicken;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
@@ -13,10 +14,14 @@ import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -41,7 +46,6 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 	@Override
 	public void update() {
 		if (!getWorld().isRemote) {
-			updateHasSeedsInfo();
 			updateChickenInfoIfNeeded();
 			updateTimerIfNeeded();
 			spawnChickenDropIfNeeded();
@@ -49,28 +53,19 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 		}
 	}
 
-	private void updateHasSeedsInfo() {
-		boolean fullOfSeedsNow = hasEnoughSeeds();
-		if (fullOfSeedsNow != fullOfSeeds) {
-			fullOfSeeds = fullOfSeedsNow;
-			updateBlockState();
-		}
-	}
-
 	private void updateChickenInfoIfNeeded() {
 		if (!mightNeedToUpdateChickenInfo) return;
 
-		boolean fullOfChickensNow = true;
-
-		for (int i = 0; i < chickenData.length; i++) {
-			updateChickenInfoIfNeededForSlot(i);
-			fullOfChickensNow = fullOfChickensNow && (chickenData[i] != null);
+		if (fullOfChickens != isFullOfChickens()) {
+			fullOfChickens = !fullOfChickens;
+			notifyBlockUpdate();
 		}
 
-		if (fullOfChickensNow != fullOfChickens) {
-			fullOfChickens = fullOfChickensNow;
-			updateBlockState();
+		if (fullOfSeeds != isFullOfSeeds()) {
+			fullOfSeeds = !fullOfSeeds;
+			notifyBlockUpdate();
 		}
+
 		mightNeedToUpdateChickenInfo = false;
 	}
 
@@ -126,7 +121,7 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 	}
 
 	private void spawnChickenDropIfNeeded() {
-		if (fullOfChickens && hasEnoughSeeds() && (timeElapsed >= timeUntilNextDrop)) {
+		if (fullOfChickens && fullOfSeeds && (timeElapsed >= timeUntilNextDrop)) {
 			if (timeUntilNextDrop > 0) {
 				decrStackSize(getSizeChickenInventory(), requiredSeedsForDrop());
 				spawnChickenDrop();
@@ -146,20 +141,25 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 		markDirty();
 	}
 
-	protected abstract void updateBlockState();
-
 	protected abstract void spawnChickenDrop();
 
 	protected abstract int getSizeChickenInventory();
 
 	protected abstract int requiredSeedsForDrop();
 
-	protected boolean isFullOfChickens() {
-		return fullOfChickens;
+	public boolean isFullOfChickens() {
+		for (int i = 0; i < chickenData.length; i++) {
+			updateChickenInfoIfNeededForSlot(i);
+			if (chickenData[i] == null) return false;
+		}
+		return true;
 	}
 
-	protected boolean isFullOfSeeds() {
-		return fullOfSeeds;
+	public boolean isFullOfSeeds() {
+		int needed = requiredSeedsForDrop();
+		if (needed == 0) return true;
+		ItemStack stack = getStackInSlot(getSizeChickenInventory());
+		return stack.getCount() >= needed;
 	}
 
 	private boolean outputIsFull() {
@@ -170,13 +170,6 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 			if (stack.getCount() < stack.getMaxStackSize()) return false;
 		}
 		return true;
-	}
-
-	protected boolean hasEnoughSeeds() {
-		int needed = requiredSeedsForDrop();
-		if (needed == 0) return true;
-		ItemStack stack = getStackInSlot(getSizeChickenInventory());
-		return stack.getCount() >= needed;
 	}
 
 	private int getOutputStackIndex() {
@@ -247,13 +240,13 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 
 	@Override
 	public ItemStack decrStackSize(int index, int count) {
-		if (index < getSizeChickenInventory()) mightNeedToUpdateChickenInfo = true;
+		if (index < getOutputStackIndex()) mightNeedToUpdateChickenInfo = true;
 		return ItemStackHelper.getAndSplit(inventory, index, count);
 	}
 
 	@Override
 	public ItemStack removeStackFromSlot(int index) {
-		if (index < getSizeChickenInventory()) mightNeedToUpdateChickenInfo = true;
+		if (index < getOutputStackIndex()) mightNeedToUpdateChickenInfo = true;
 		return ItemStackHelper.getAndRemove(inventory, index);
 	}
 
@@ -265,7 +258,7 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 			stack.setCount(getInventoryStackLimit());
 		}
 
-		if (index < getSizeChickenInventory()) mightNeedToUpdateChickenInfo = true;
+		if (index < getOutputStackIndex()) mightNeedToUpdateChickenInfo = true;
 	}
 
 	@Override
@@ -356,6 +349,32 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 		}
 
 		return itemSlots;
+	}
+
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+		return (oldState.getBlock() != newState.getBlock());
+	}
+
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		return new SPacketUpdateTileEntity(pos, 0, getUpdateTag());
+	}
+
+	@Override
+	public NBTTagCompound getUpdateTag() {
+		return writeToNBT(new NBTTagCompound());
+	}
+
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		readFromNBT(pkt.getNbtCompound());
+		notifyBlockUpdate();
+	}
+
+	private void notifyBlockUpdate() {
+		final IBlockState state = getWorld().getBlockState(pos);
+		getWorld().notifyBlockUpdate(pos, state, state, 2);
 	}
 
 	@Override
