@@ -28,42 +28,36 @@ public class ItemCatcher extends Item {
 	 */
 	// /summon chickens.ChickensChicken ~ ~ ~ {Type:201,Gain:8,Growth:9,Strength:10}
 	@Override
-	public boolean itemInteractionForEntity(ItemStack itemstack, EntityPlayer player, EntityLivingBase entity, EnumHand hand) {
+	public boolean itemInteractionForEntity(ItemStack itemStack, EntityPlayer player, EntityLivingBase entity, EnumHand hand) {
+		DataChicken chickenData = DataChicken.getDataFromEntity(entity);
 		Vec3d pos = new Vec3d(entity.posX, entity.posY, entity.posZ);
 		World world = entity.getEntityWorld();
 
-		if (!captureChicken(entity, world.isRemote)) {
+		if (chickenData == null) {
 			return false;
-		}
-
-		if (world.isRemote) {
-			spawnParticles(pos, world);
-		}
-
-		world.playSound(player, entity.posX, entity.posY, entity.posZ, SoundEvents.ENTITY_CHICKEN_HURT, entity.getSoundCategory(), 1.0F, 1.0F);
-
-		itemstack.damageItem(1, player);
-
-		return true;
-	}
-
-	private boolean captureChicken(EntityLivingBase entity, boolean isRemote) {
-		DataChicken chickenData = DataChicken.getDataFromEntity(entity);
-
-		if (chickenData == null) return false;
-
-		if (!isRemote) {
-			EntityItem item = entity.entityDropItem(chickenData.buildChickenStack(), 1.0F);
-			item.motionX = 0;
-			item.motionY = 0.2D;
-			item.motionZ = 0;
-			entity.getEntityWorld().removeEntity(entity);
+		} else if (entity.isChild()) {
+			if (world.isRemote) {
+				spawnParticles(pos, world, EnumParticleTypes.SMOKE_NORMAL);
+			}
+			world.playSound(player, pos.x, pos.y, pos.z, SoundEvents.ENTITY_CHICKEN_HURT, entity.getSoundCategory(), 1.0F, 1.0F);
+		} else {
+			if (world.isRemote) {
+				spawnParticles(pos, world, EnumParticleTypes.EXPLOSION_NORMAL);
+			} else {
+				EntityItem item = entity.entityDropItem(chickenData.buildChickenStack(), 1.0F);
+				item.motionX = 0;
+				item.motionY = 0.2D;
+				item.motionZ = 0;
+				entity.getEntityWorld().removeEntity(entity);
+			}
+			world.playSound(player, pos.x, pos.y, pos.z, SoundEvents.ENTITY_CHICKEN_EGG, entity.getSoundCategory(), 1.0F, 1.0F);
+			itemStack.damageItem(1, player);
 		}
 
 		return true;
 	}
 
-	private void spawnParticles(Vec3d pos, World world) {
+	private void spawnParticles(Vec3d pos, World world, EnumParticleTypes particleType) {
 		Random rand = new Random();
 
 		for (int k = 0; k < 20; ++k) {
@@ -73,7 +67,7 @@ public class ItemCatcher extends Item {
 			double xSpeed = rand.nextGaussian() * 0.02D;
 			double ySpeed = rand.nextGaussian() * 0.2D;
 			double zSpeed = rand.nextGaussian() * 0.02D;
-			world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed, new int[0]);
+			world.spawnParticle(particleType, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed, new int[0]);
 		}
 	}
 
