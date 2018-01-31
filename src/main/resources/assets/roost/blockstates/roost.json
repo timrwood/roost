@@ -42,6 +42,7 @@
       "brown": { "textures": { "chicken": "roost:blocks/chicken/brown" } },
       "bullet": { "textures": { "chicken": "roost:blocks/chicken/bullet" } },
       "cable": { "textures": { "chicken": "roost:blocks/chicken/cable" } },
+      "chrome": { "textures": { "chicken": "roost:blocks/chicken/chrome" } },
       "cinnabar": { "textures": { "chicken": "roost:blocks/chicken/cinnabar" } },
       "clay": { "textures": { "chicken": "roost:blocks/chicken/clay" } },
       "coal": { "textures": { "chicken": "roost:blocks/chicken/coal" } },
@@ -128,6 +129,7 @@
       "redstone": { "textures": { "chicken": "roost:blocks/chicken/redstone" } },
       "redstone_alloy": { "textures": { "chicken": "roost:blocks/chicken/redstone_alloy" } },
       "redstonecrystal": { "textures": { "chicken": "roost:blocks/chicken/redstonecrystal" } },
+      "refinediron": { "textures": { "chicken": "roost:blocks/chicken/refinediron" } },
       "restoniacrystal": { "textures": { "chicken": "roost:blocks/chicken/restoniacrystal" } },
       "rich_slag": { "textures": { "chicken": "roost:blocks/chicken/rich_slag" } },
       "rubber": { "textures": { "chicken": "roost:blocks/chicken/rubber" } },
@@ -153,7 +155,10 @@
       "tanzanite": { "textures": { "chicken": "roost:blocks/chicken/tanzanite" } },
       "terrasteel": { "textures": { "chicken": "roost:blocks/chicken/terrasteel" } },
       "tin": { "textures": { "chicken": "roost:blocks/chicken/tin" } },
+      "titanium": { "textures": { "chicken": "roost:blocks/chicken/titanium" } },
       "topaz": { "textures": { "chicken": "roost:blocks/chicken/topaz" } },
+      "tungsten": { "textures": { "chicken": "roost:blocks/chicken/tungsten" } },
+      "tungstensteel": { "textures": { "chicken": "roost:blocks/chicken/tungstensteel" } },
       "unknown": { "textures": { "chicken": "roost:blocks/chicken/unknown" } },
       "uranium": { "textures": { "chicken": "roost:blocks/chicken/uranium" } },
       "vanilla": { "textures": { "chicken": "roost:blocks/chicken/vanilla" } },
@@ -165,6 +170,7 @@
       "xp": { "textures": { "chicken": "roost:blocks/chicken/xp" } },
       "yellorium": { "textures": { "chicken": "roost:blocks/chicken/yellorium" } },
       "yellow": { "textures": { "chicken": "roost:blocks/chicken/yellow" } },
+      "yellowgarnet": { "textures": { "chicken": "roost:blocks/chicken/yellowgarnet" } },
       "zinc": { "textures": { "chicken": "roost:blocks/chicken/zinc" } }
     }
   }
