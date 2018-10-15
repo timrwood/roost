@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = Roost.MODID, version = Roost.VERSION)
+@Mod(modid = Roost.MODID, version = Roost.VERSION, guiFactory = "com.timwoodcreates.roost.config.ConfigurationGuiFactory")
 public class Roost {
 	public static final String MODID = "roost";
 	public static final String NAME = "Roost";
