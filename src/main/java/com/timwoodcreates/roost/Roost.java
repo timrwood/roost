@@ -1,5 +1,6 @@
 package com.timwoodcreates.roost;
 
+import com.timwoodcreates.roost.config.ConfigurationHandler;
 import com.timwoodcreates.roost.proxy.ProxyCommon;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -16,6 +17,7 @@ public class Roost {
 	public static final String NAME = "Roost";
 	public static final String VERSION = "@VERSION@";
 	public static final CreativeTabs TAB = new RoostTab();
+	public static ConfigurationHandler config;
 
 	@Instance(MODID)
 	public static Roost INSTANCE;

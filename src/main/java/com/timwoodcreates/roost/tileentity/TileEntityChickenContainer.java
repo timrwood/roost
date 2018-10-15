@@ -29,7 +29,7 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 	private NonNullList<ItemStack> inventory = NonNullList.<ItemStack>withSize(getSizeInventory(), ItemStack.EMPTY);
 	private boolean mightNeedToUpdateChickenInfo = true;
 	private boolean skipNextTimerReset = false;
-	private int timeUntilNextDrop = 0;
+	protected int timeUntilNextDrop = 0;
 	private int timeElapsed = 0;
 
 	private DataChicken[] chickenData = new DataChicken[getSizeChickenInventory()];
@@ -125,7 +125,7 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 		}
 	}
 
-	private void resetTimer() {
+	protected void resetTimer() {
 		timeElapsed = 0;
 		timeUntilNextDrop = 0;
 		for (int i = 0; i < chickenData.length; i++) {

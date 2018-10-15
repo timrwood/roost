@@ -27,6 +27,19 @@ public class TileEntityBreeder extends TileEntityChickenContainer {
 	private static final String HAS_SEEDS_KEY = "HasSeeds";
 
 	@Override
+	protected void resetTimer() {
+		super.resetTimer();
+
+		float multiplier = Roost.config.speedBreeder;
+
+		if (multiplier <= 0) {
+			multiplier = Float.MIN_VALUE;
+		}
+
+		timeUntilNextDrop /= multiplier;
+	}
+
+	@Override
 	protected void isFullOfChickensChanged(boolean isFull) {
 		BlockBreeder.setIsBreedingState(isFull, getWorld(), pos);
 	}

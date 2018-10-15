@@ -25,6 +25,19 @@ public class TileEntityRoost extends TileEntityChickenContainer {
 	private static int CHICKEN_SLOT = 0;
 
 	@Override
+	protected void resetTimer() {
+		super.resetTimer();
+
+		float multiplier = Roost.config.speedRoost;
+
+		if (multiplier <= 0) {
+			multiplier = Float.MIN_VALUE;
+		}
+
+		timeUntilNextDrop /= multiplier;
+	}
+
+	@Override
 	protected void isFullOfChickensChanged(boolean isFull) {
 		notifyBlockUpdate();
 	}
