@@ -24,5 +24,5 @@ item.roost.chicken.spawning.snow=Found in snowy biomes
 
 itemGroup.roost=Roost
 
-config.speed.breeder=The speed multiplier for the breeder.  Higher is faster.
-config.speed.roost=The speed multiplier for the roost.  Higher is faster.
+config.breeder.speed=The speed multiplier for the breeder. Higher is faster.
+config.roost.speed=The speed multiplier for the roost. Higher is faster.

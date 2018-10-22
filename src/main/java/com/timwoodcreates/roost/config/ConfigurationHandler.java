@@ -12,11 +12,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ConfigurationHandler {
 	public static Configuration config;
-	public float speedBreeder = 1f;
-	public float speedRoost = 1f;
+	public float breederSpeed = 1f;
+	public float roostSpeed = 1f;
 
-	private static float MIN_VALUE = 0.1f;
-	private static float MAX_VALUE = 20f;
+	private static float MIN_VALUE = 0.01f;
+	private static float MAX_VALUE = 100f;
 
 	public ConfigurationHandler(File configFile) {
 		MinecraftForge.EVENT_BUS.register(this);
@@ -29,8 +29,8 @@ public class ConfigurationHandler {
 
 	private void update() {
 		String category = Configuration.CATEGORY_GENERAL;
-		speedBreeder = config.getFloat("roost.speedBreeder", category, speedBreeder, MIN_VALUE, MAX_VALUE, I18n.format("config.speed.breeder"));
-		speedRoost = config.getFloat("roost.speedRoost", category, speedRoost, MIN_VALUE, MAX_VALUE, I18n.format("config.speed.roost"));
+		breederSpeed = config.getFloat("roost.breederSpeed", category, breederSpeed, MIN_VALUE, MAX_VALUE, I18n.format("config.breeder.speed"));
+		roostSpeed = config.getFloat("roost.roostSpeed", category, roostSpeed, MIN_VALUE, MAX_VALUE, I18n.format("config.roost.speed"));
 
 		if (config.hasChanged()) config.save();
 	}
