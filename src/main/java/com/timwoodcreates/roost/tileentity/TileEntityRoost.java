@@ -3,6 +3,7 @@ package com.timwoodcreates.roost.tileentity;
 import java.util.List;
 
 import com.timwoodcreates.roost.Roost;
+import com.timwoodcreates.roost.RoostConfig;
 import com.timwoodcreates.roost.data.DataChicken;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -133,8 +134,8 @@ public class TileEntityRoost extends TileEntityChickenContainer {
 	}
 
 	@Override
-	protected float speedMultiplier() {
-		return Roost.config.roostSpeed;
+	protected double speedMultiplier() {
+		return RoostConfig.roostSpeed;
 	}
 
 }

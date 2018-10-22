@@ -158,7 +158,7 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 
 	protected abstract int requiredSeedsForDrop();
 
-	protected abstract float speedMultiplier();
+	protected abstract double speedMultiplier();
 
 	public boolean isFullOfChickens() {
 		for (int i = 0; i < chickenData.length; i++) {

@@ -6,7 +6,6 @@ import java.util.List;
 import com.timwoodcreates.roost.Roost;
 import com.timwoodcreates.roost.RoostBlocks;
 import com.timwoodcreates.roost.RoostItems;
-import com.timwoodcreates.roost.config.ConfigurationHandler;
 import com.timwoodcreates.roost.gui.GuiHandler;
 import com.timwoodcreates.roost.tileentity.TileEntityBreeder;
 import com.timwoodcreates.roost.tileentity.TileEntityCollector;
@@ -34,8 +33,6 @@ public class ProxyCommon {
 
 	public void preInit(FMLPreInitializationEvent e) {
 		NetworkRegistry.INSTANCE.registerGuiHandler(Roost.INSTANCE, new GuiHandler());
-
-		Roost.config = new ConfigurationHandler(e.getSuggestedConfigurationFile());
 
 		registerBlocks();
 		registerItems();
