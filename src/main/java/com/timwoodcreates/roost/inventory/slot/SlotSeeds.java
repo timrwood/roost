@@ -12,6 +12,14 @@ public class SlotSeeds extends Slot {
 	}
 
 	@Override
+	public void onSlotChanged() {
+		super.onSlotChanged();
+		if (this.inventory instanceof TileEntityChickenContainer) {
+			((TileEntityChickenContainer) this.inventory).willNeedToUpdateChickenInfo();
+		}
+	}
+
+	@Override
 	public boolean isItemValid(ItemStack stack) {
 		return TileEntityChickenContainer.isSeed(stack);
 	}

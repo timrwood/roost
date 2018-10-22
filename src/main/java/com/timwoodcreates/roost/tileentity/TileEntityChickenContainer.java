@@ -55,6 +55,10 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 		}
 	}
 
+	public void willNeedToUpdateChickenInfo() {
+		mightNeedToUpdateChickenInfo = true;
+	}
+
 	private void updateChickenInfoIfNeeded() {
 		if (!mightNeedToUpdateChickenInfo) return;
 
@@ -246,13 +250,13 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 
 	@Override
 	public ItemStack decrStackSize(int index, int count) {
-		if (index < getOutputStackIndex()) mightNeedToUpdateChickenInfo = true;
+		if (index < getOutputStackIndex()) willNeedToUpdateChickenInfo();
 		return ItemStackHelper.getAndSplit(inventory, index, count);
 	}
 
 	@Override
 	public ItemStack removeStackFromSlot(int index) {
-		if (index < getOutputStackIndex()) mightNeedToUpdateChickenInfo = true;
+		if (index < getOutputStackIndex()) willNeedToUpdateChickenInfo();
 		return ItemStackHelper.getAndRemove(inventory, index);
 	}
 
@@ -264,7 +268,7 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 			stack.setCount(getInventoryStackLimit());
 		}
 
-		if (index < getOutputStackIndex()) mightNeedToUpdateChickenInfo = true;
+		if (index < getOutputStackIndex()) willNeedToUpdateChickenInfo();
 	}
 
 	@Override
