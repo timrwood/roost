@@ -23,3 +23,6 @@ item.roost.chicken.spawning.normal=Found in the overworld
 item.roost.chicken.spawning.snow=Found in snowy biomes
 
 itemGroup.roost=Roost
+
+config.speed.breeder=The speed multiplier for the breeder.  Higher is faster.
+config.speed.roost=The speed multiplier for the roost.  Higher is faster.

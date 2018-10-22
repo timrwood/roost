@@ -146,6 +146,7 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 		for (int i = 0; i < chickenData.length; i++) {
 			if (chickenData[i] != null) {
 				timeUntilNextDrop = Math.max(timeUntilNextDrop, chickenData[i].getLayTime());
+				timeUntilNextDrop /= speedMultiplier();
 			}
 		}
 		markDirty();
@@ -156,6 +157,8 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 	protected abstract int getSizeChickenInventory();
 
 	protected abstract int requiredSeedsForDrop();
+
+	protected abstract float speedMultiplier();
 
 	public boolean isFullOfChickens() {
 		for (int i = 0; i < chickenData.length; i++) {

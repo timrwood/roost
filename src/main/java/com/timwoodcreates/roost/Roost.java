@@ -1,5 +1,6 @@
 package com.timwoodcreates.roost;
 
+import com.timwoodcreates.roost.config.ConfigurationHandler;
 import com.timwoodcreates.roost.proxy.ProxyCommon;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -10,12 +11,13 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = Roost.MODID, version = Roost.VERSION)
+@Mod(modid = Roost.MODID, version = Roost.VERSION, guiFactory = "com.timwoodcreates.roost.config.ConfigurationGuiFactory")
 public class Roost {
 	public static final String MODID = "roost";
 	public static final String NAME = "Roost";
 	public static final String VERSION = "@VERSION@";
 	public static final CreativeTabs TAB = new RoostTab();
+	public static ConfigurationHandler config;
 
 	@Instance(MODID)
 	public static Roost INSTANCE;

@@ -109,4 +109,9 @@ public class TileEntityBreeder extends TileEntityChickenContainer {
 		return 2;
 	}
 
+	@Override
+	protected float speedMultiplier() {
+		return Roost.config.speedBreeder;
+	}
+
 }
