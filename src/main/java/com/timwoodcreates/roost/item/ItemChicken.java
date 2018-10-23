@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.timwoodcreates.roost.Roost;
 import com.timwoodcreates.roost.data.DataChicken;
 import com.timwoodcreates.roost.data.EnumChickenType;
 import com.timwoodcreates.roost.tileentity.TileEntityRoost;
@@ -33,7 +34,7 @@ public class ItemChicken extends Item {
 
 	public ItemChicken() {
 		super();
-		setMaxStackSize(16);
+		setMaxStackSize(Roost.config.stackSize);
 		setHasSubtypes(true);
 		addPropertyOverride(new ResourceLocation("chicken"), new ItemChickenPropertyGetter());
 	}
