@@ -13,6 +13,7 @@ import com.setycz.chickens.handler.SpawnType;
 import com.setycz.chickens.item.ItemSpawnEgg;
 import com.setycz.chickens.registry.ChickensRegistry;
 import com.setycz.chickens.registry.ChickensRegistryItem;
+import com.timwoodcreates.roost.RoostConfig;
 import com.timwoodcreates.roost.RoostItems;
 
 import net.minecraft.entity.Entity;
@@ -52,6 +53,18 @@ public class DataChickenModded extends DataChicken {
 		if (chicken != null) return new DataChickenModded(chicken, stack.getTagCompound());
 
 		return null;
+	}
+
+	public void inheritParents(DataChickenModded p1, DataChickenModded p2) {
+		String p1_type = p1.getChickenType();
+		String p2_type = p2.getChickenType();
+		String ct = getChickenType();
+
+		if (!ct.equals(p1_type) && !ct.equals(p2_type) && !p1_type.equals(p2_type)) {
+			gain = Math.max((int) (((p1.gain + p2.gain) / 2.0) * RoostConfig.breederInheritanceRatio), 1);
+			growth = Math.max((int) (((p1.growth + p2.growth) / 2.0) * RoostConfig.breederInheritanceRatio), 1);
+			strength = Math.max((int) (((p1.strength + p2.strength) / 2.0) * RoostConfig.breederInheritanceRatio), 1);
+		}
 	}
 
 	public static void addAllChickens(List<DataChicken> chickens) {

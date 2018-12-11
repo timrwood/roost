@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.regex.Pattern;
 
 import com.google.common.base.CaseFormat;
+import com.timwoodcreates.roost.RoostConfig;
 import com.timwoodcreates.roost.RoostItems;
 
 import net.minecraft.client.resources.I18n;
@@ -126,6 +127,15 @@ public class DataChicken {
 		if (parentA == null || parentB == null) return ItemStack.EMPTY;
 		DataChicken childData = DataChicken.getDataFromEntity(parentA.createChild(parentB));
 		if (childData == null) return ItemStack.EMPTY;
+
+		if (RoostConfig.breederInheritanceEnabled &&
+			childData instanceof DataChickenModded &&
+			chickenA instanceof DataChickenModded &&
+			chickenB instanceof DataChickenModded) {
+
+			((DataChickenModded) childData).inheritParents((DataChickenModded) chickenA, (DataChickenModded) chickenB);
+		}
+
 		return childData.buildChickenStack();
 	}
 

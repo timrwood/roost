@@ -22,6 +22,15 @@ public class RoostConfig {
 	@RangeDouble(min = 0.01d, max = 100d)
 	public static double breederSpeed = 1d;
 
+	@Comment("Enables stat inheritance when crossbreeding.")
+	public static boolean breederInheritanceEnabled = false;
+
+	@Comment({"The ratio at which stats are inherited.",
+                 "1.0 = average of parent's stats.",
+                 "0.5 = 50% of the average."})
+	@RangeDouble(min = 0.1d, max = 1d)
+	public static double breederInheritanceRatio = 1d;
+
 	public static void sync() {
 		ConfigManager.sync(Roost.MODID, Config.Type.INSTANCE);
 	}
