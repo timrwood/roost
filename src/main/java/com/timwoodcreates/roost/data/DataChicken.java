@@ -119,6 +119,10 @@ public class DataChicken {
 	public void spawnEntity(World world, BlockPos pos) {
 	}
 
+	public String getChickenType() {
+		return null;
+	}
+
 	private static ItemStack createChildStack(DataChicken chickenA, DataChicken chickenB, World world) {
 		if (chickenA.getClass() != chickenB.getClass()) return chickenA.buildChickenStack();
 		EntityChicken parentA = chickenA.buildEntity(world);

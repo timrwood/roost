@@ -5,7 +5,6 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.timwoodcreates.roost.data.DataChicken;
-import com.timwoodcreates.roost.data.EnumChickenType;
 import com.timwoodcreates.roost.tileentity.TileEntityRoost;
 
 import net.minecraft.client.resources.I18n;
@@ -35,7 +34,6 @@ public class ItemChicken extends Item {
 		super();
 		setMaxStackSize(16);
 		setHasSubtypes(true);
-		addPropertyOverride(new ResourceLocation("chicken"), new ItemChickenPropertyGetter());
 	}
 
 	@Override
@@ -87,15 +85,5 @@ public class ItemChicken extends Item {
 		stack.shrink(1);
 	}
 
-	private class ItemChickenPropertyGetter implements IItemPropertyGetter {
-		@Override
-		public float apply(ItemStack stack, World worldIn, EntityLivingBase entityIn) {
-			DataChicken chickenData = DataChicken.getDataFromStack(stack);
-			if (chickenData == null) return 1.0f;
-			EnumChickenType chickenType = EnumChickenType.get(chickenData.getName());
-			if (chickenType == null) chickenType = EnumChickenType.UNKNOWN;
-			return (float) chickenType.getItemIndex();
-		}
-	}
 
 }

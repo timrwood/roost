@@ -107,4 +107,7 @@ public class DataChickenVanilla extends DataChicken {
 		return "DataChickenVanilla [name=" + getName() + "]";
 	}
 
+	public String getChickenType() {
+		return "minecraft:vanilla";
+	}
 }

@@ -1,5 +1,7 @@
 package com.timwoodcreates.roost;
 
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,5 +35,11 @@ public class Roost {
 		RoostConfig.sync();
 
 		PROXY.preInit(e);
+	}
+
+
+	@EventHandler
+	public static void loadComplete(FMLLoadCompleteEvent event) {
+		Minecraft.getMinecraft().refreshResources();
 	}
 }

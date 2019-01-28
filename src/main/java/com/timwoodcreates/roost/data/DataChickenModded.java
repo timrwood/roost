@@ -97,7 +97,7 @@ public class DataChickenModded extends DataChicken {
 		}
 	}
 
-	private String getChickenType() {
+	public String getChickenType() {
 		return chicken.getRegistryName().toString();
 	}
 
