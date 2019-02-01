@@ -155,6 +155,7 @@
     { "predicate": { "chicken": 0.299 }, "model": "roost:item/chicken/yellow" },
     { "predicate": { "chicken": 0.301 }, "model": "roost:item/chicken/yellowgarnet" },
     { "predicate": { "chicken": 0.303 }, "model": "roost:item/chicken/zinc" },
-    { "predicate": { "chicken": 0.305 }, "model": "roost:item/chicken/vanilla" }
+    { "predicate": { "chicken": 0.305 }, "model": "roost:item/chicken/crystalized" },
+    { "predicate": { "chicken": 0.307 }, "model": "roost:item/chicken/vanilla" }
   ]
 }

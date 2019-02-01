@@ -158,7 +158,8 @@ public enum EnumChickenType implements IStringSerializable {
 	YELLORIUM("yellorium", 0.298),
 	YELLOW("yellow", 0.300),
 	YELLOWGARNET("yellowgarnet", 0.302),
-	ZINC("zinc", 0.304);
+	ZINC("zinc", 0.304),
+	CRYSTALIZED("crystalized", 0.306);
 
 	private final String name;
 	private final double itemIndex;

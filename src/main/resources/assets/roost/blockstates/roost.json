@@ -171,7 +171,8 @@
       "yellorium": { "textures": { "chicken": "roost:blocks/chicken/yellorium" } },
       "yellow": { "textures": { "chicken": "roost:blocks/chicken/yellow" } },
       "yellowgarnet": { "textures": { "chicken": "roost:blocks/chicken/yellowgarnet" } },
-      "zinc": { "textures": { "chicken": "roost:blocks/chicken/zinc" } }
+      "zinc": { "textures": { "chicken": "roost:blocks/chicken/zinc" } },
+      "crystalized": { "textures": { "chicken": "roost:blocks/chicken/crystalized" } }
     }
   }
 }
