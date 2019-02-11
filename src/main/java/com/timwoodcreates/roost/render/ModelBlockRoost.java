@@ -140,7 +140,7 @@ public class ModelBlockRoost implements IModel {
 
         @Override
         public TextureAtlasSprite getParticleTexture() {
-            return null;
+            return roostModel.getParticleTexture();
         }
 
         @Override
