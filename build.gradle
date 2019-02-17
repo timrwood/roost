@@ -52,6 +52,13 @@ repositories {
     }
 }
 
+sourceSets {
+    main {
+        resources {
+            srcDirs += 'docs'
+        }
+    }
+}
 dependencies {
     deobfCompile "chickens:chickens:${chickens_version}"
     deobfCompile "mezz.jei:${jei_version}"
