@@ -3,6 +3,7 @@ package com.timwoodcreates.roost.data;
 import java.util.Arrays;
 import java.util.List;
 
+import com.timwoodcreates.roost.RoostConfig;
 import com.timwoodcreates.roost.RoostItems;
 
 import net.minecraft.entity.Entity;
@@ -51,7 +52,7 @@ public class DataChickenVanilla extends DataChicken {
 
 	@Override
 	public ItemStack createDropStack() {
-		Item item = rand.nextInt(3) > 0 ? Items.EGG : Items.FEATHER;
+		Item item = rand.nextInt(3) > 0 && !RoostConfig.disableEggLaying ? Items.EGG : Items.FEATHER;
 		return new ItemStack(item, 1);
 	}
 
