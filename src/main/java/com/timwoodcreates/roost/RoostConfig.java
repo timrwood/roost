@@ -22,6 +22,9 @@ public class RoostConfig {
 	@RangeDouble(min = 0.01d, max = 100d)
 	public static double breederSpeed = 1d;
 
+	@Comment("Prevent vanilla chickens from laying eggs. Of interest to modpack makers only.")
+	public static boolean disableEggLaying = false;
+
 	public static void sync() {
 		ConfigManager.sync(Roost.MODID, Config.Type.INSTANCE);
 	}
