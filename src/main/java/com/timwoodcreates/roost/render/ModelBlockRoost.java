@@ -38,9 +38,11 @@ import java.util.stream.Collectors;
 public class ModelBlockRoost implements IModel {
 
     public IModel roost;
+    public IModel chicken;
     public ModelBlockRoost() {
         try {
             roost = ModelLoaderRegistry.getModel(new ResourceLocation("roost:block/roost_box"));
+            chicken = ModelLoaderRegistry.getModel(new ResourceLocation("roost:block/roost_chicken"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -51,6 +53,7 @@ public class ModelBlockRoost implements IModel {
     public Collection<ResourceLocation> getTextures() {
         List<ResourceLocation> textures = new ArrayList<>();
         textures.addAll(roost.getTextures());
+        textures.addAll(chicken.getTextures());
         return textures;
     }
 
@@ -80,11 +83,10 @@ public class ModelBlockRoost implements IModel {
         public IBakedModel roostModel = null;
         ItemOverrideList overrides = new ItemOverrideList(ImmutableList.of());
 
-        public final ResourceLocation dynamic = new ResourceLocation("roost", "dynamic/chicken");
+        public final ResourceLocation placeholder = new ResourceLocation("roost", "blocks/chicken/vanilla");
 
         public BakedModelBlockRoost(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
             try {
-                IModel chicken = ModelLoaderRegistry.getModel(new ResourceLocation("roost:block/roost_chicken"));
                 roostModel = roost.bake(state, format, bakedTextureGetter);
 
                 for (ChickensRegistryItem item : ChickensRegistry.getItems()) {
@@ -93,7 +95,7 @@ public class ModelBlockRoost implements IModel {
                             /* + name.getResourceDomain() + "/" */
                             + name.getResourcePath());
                     IBakedModel baked = chicken.bake(state, format, (loc) -> {
-                        if (loc.equals(dynamic))
+                        if (loc.equals(placeholder))
                             return bakedTextureGetter.apply(texLoc);
                         return bakedTextureGetter.apply(loc);
                     });

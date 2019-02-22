@@ -9,7 +9,7 @@
     }
   },
   "textures": {
-    "chicken": "roost:dynamic/chicken"
+    "chicken": "roost:blocks/chicken/vanilla"
   },
   "elements": [
     {
