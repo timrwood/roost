@@ -20,6 +20,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -38,6 +39,9 @@ public class ProxyCommon {
 		registerItems();
 		registerTileEntities();
 		registerRecipies();
+	}
+
+	public void loadComplete(FMLLoadCompleteEvent e) {
 	}
 
 	@SubscribeEvent

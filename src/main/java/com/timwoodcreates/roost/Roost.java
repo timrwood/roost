@@ -1,7 +1,6 @@
 package com.timwoodcreates.roost;
 
 import com.timwoodcreates.roost.proxy.ProxyCommon;
-import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -43,7 +42,7 @@ public class Roost {
 
 	@EventHandler
 	public static void loadComplete(FMLLoadCompleteEvent event) {
-		Minecraft.getMinecraft().refreshResources();
+		PROXY.loadComplete(event);
 	}
 
 }

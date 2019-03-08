@@ -6,12 +6,14 @@ import com.timwoodcreates.roost.RoostItems;
 import com.timwoodcreates.roost.render.ModelBlockRoost;
 import com.timwoodcreates.roost.render.ModelItemChicken;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -33,6 +35,11 @@ public class ProxyClient extends ProxyCommon {
 		setModel(RoostBlocks.BLOCK_COLLECTOR);
 		setModel(RoostItems.ITEM_CATCHER);
 		setModel(RoostItems.ITEM_CHICKEN);
+	}
+
+	@Override
+	public void loadComplete(FMLLoadCompleteEvent e) {
+		Minecraft.getMinecraft().refreshResources();
 	}
 
 	private static void setModel(Block block) {
