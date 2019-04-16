@@ -1,7 +1,7 @@
-Coop
+Roost
 ====
 
-This is an unofficial continuation of the Minecraft mod [Roost](https://minecraft.curseforge.com/projects/roost),
-created to allow Roost to support any chickens added via ContentTweaker.
+[![CurseForge](http://cf.way2muchnoise.eu/versions/roost_latest.svg)](https://minecraft.curseforge.com/projects/roost)
 
-https://minecraft.curseforge.com/projects/coop
+A Minecraft mod that gives chickens a place to rest.
+
