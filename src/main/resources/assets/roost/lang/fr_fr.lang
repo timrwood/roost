@@ -1,0 +1,30 @@
+tile.roost.breeder.name=Reproducteur de poules
+tile.roost.collector.name=Collecteur de juchoir
+tile.roost.roost.name=Juchoir
+
+container.roost.breeder=Reproducteur de poules
+container.roost.breeder.seedless=Pas de graines
+container.roost.collector=Collecteur de juchoir
+container.roost.roost=Juchoir
+container.roost.progress=Progrès : %s
+
+gui.jei.roost.category.breeding=Reproduire des poules
+gui.jei.roost.category.catching=Attraper des poules
+gui.jei.roost.category.roosting=Élever des poules
+
+item.roost.catcher.name=Attrape-poules
+item.roost.chicken.strength=Force : %s
+item.roost.chicken.gain=Gain : %s
+item.roost.chicken.growth=Croissance: %s
+item.roost.chicken.parent1=Engendré par %s
+item.roost.chicken.parent2=et %s
+item.roost.chicken.spawning.hell=Trouvé dans le nether
+item.roost.chicken.spawning.normal=Trouvé sur la surface
+item.roost.chicken.spawning.snow=Trouvé des les biomes enneigés
+
+itemGroup.roost=Roost
+
+config.roost.breederSpeed.tooltip=Multiplicateur de vitesse pour le reproducteur. Plus élevé = plus rapide.
+config.roost.breederSpeed=Vitesse reproducteur
+config.roost.roostSpeed.tooltip=Multiplicateur de vitesse pour le juchoir. Plus élevé = plus rapide.
+config.roost.roostSpeed=Vitesse juchoir
