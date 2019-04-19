@@ -123,6 +123,10 @@ public class DataChicken {
 		return null;
 	}
 
+	public String getTextureName() {
+		return null;
+	}
+
 	private static ItemStack createChildStack(DataChicken chickenA, DataChicken chickenB, World world) {
 		if (chickenA.getClass() != chickenB.getClass()) return chickenA.buildChickenStack();
 		EntityChicken parentA = chickenA.buildEntity(world);

@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.setycz.chickens.registry.ChickensRegistry;
 import com.setycz.chickens.registry.ChickensRegistryItem;
 import com.timwoodcreates.roost.block.BlockRoost;
+import com.timwoodcreates.roost.data.DataChicken;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -32,6 +33,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -59,11 +61,11 @@ public class ModelBlockRoost implements IModel {
     }
 
     public static Collection<ResourceLocation> getChickenTextures() {
-        List<ResourceLocation> textures = ChickensRegistry.getItems().stream().map((item) ->
-                new ResourceLocation("roost", "blocks/chicken/"
-                        /* + item.getRegistryName().getResourceDomain() + "/" */
-                        + item.getRegistryName().getResourcePath())
-        ).collect(Collectors.toList());
+        List<ResourceLocation> textures = DataChicken.getAllChickens().stream()
+                .map(DataChicken::getTextureName)
+                .filter(Objects::nonNull).map((item) ->
+                    new ResourceLocation("roost", "blocks/chicken/" + item))
+                .collect(Collectors.toList());
         return textures;
     }
 
@@ -90,17 +92,18 @@ public class ModelBlockRoost implements IModel {
             try {
                 roostModel = roost.bake(state, format, bakedTextureGetter);
 
-                for (ChickensRegistryItem item : ChickensRegistry.getItems()) {
-                    ResourceLocation name = item.getRegistryName();
+                for (DataChicken chickenData: DataChicken.getAllChickens()) {
+                    if(chickenData.getChickenType() == null) continue;
+
                     ResourceLocation texLoc = new ResourceLocation("roost", "blocks/chicken/"
                             /* + name.getResourceDomain() + "/" */
-                            + name.getResourcePath());
+                            + chickenData.getTextureName());
                     IBakedModel baked = chicken.bake(state, format, (loc) -> {
                         if (loc.equals(placeholder))
                             return bakedTextureGetter.apply(texLoc);
                         return bakedTextureGetter.apply(loc);
                     });
-                    chickenModels.put(name.toString(), baked);
+                    chickenModels.put(chickenData.getChickenType(), baked);
 
                 }
 

@@ -101,6 +101,10 @@ public class DataChickenModded extends DataChicken {
 		return chicken.getRegistryName().toString();
 	}
 
+	public String getTextureName() {
+		return chicken.getRegistryName().getResourcePath();
+	}
+
 	@Override
 	public void addInfoToTooltip(List<String> tooltip) {
 		if (growth > 1 && gain > 1 && strength > 1) {

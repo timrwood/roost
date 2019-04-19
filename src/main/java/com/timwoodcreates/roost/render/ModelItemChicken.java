@@ -34,6 +34,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -45,10 +46,11 @@ public class ModelItemChicken implements IModel {
     }
 
     public static Collection<ResourceLocation> getItemTextures() {
-        List<ResourceLocation> textures = ChickensRegistry.getItems().stream().map((item) ->
-            new ResourceLocation("roost", "items/chicken/" /* item.getRegistryName().getResourceDomain() */
-                    + item.getRegistryName().getResourcePath())
-        ).collect(Collectors.toList());
+        List<ResourceLocation> textures = DataChicken.getAllChickens().stream()
+                .map(DataChicken::getTextureName)
+                .filter(Objects::nonNull).map((item) ->
+                        new ResourceLocation("roost", "items/chicken/" + item))
+                .collect(Collectors.toList());
         textures.add(
             new ResourceLocation("roost", "items/chicken/vanilla")
         );
@@ -70,13 +72,13 @@ public class ModelItemChicken implements IModel {
             try {
                 IModel model = ModelLoaderRegistry.getModel(new ResourceLocation("roost:item/chicken/vanilla"));
 
-                for (ChickensRegistryItem item : ChickensRegistry.getItems()) {
-                    ResourceLocation name = item.getRegistryName();
+                for (DataChicken chickenData: DataChicken.getAllChickens()) {
+                    if(chickenData.getChickenType() == null) continue;
+
                     ResourceLocation texLoc = new ResourceLocation("roost", "items/chicken/"
-                            /* + name.getResourceDomain() + "/" */
-                            + name.getResourcePath());
+                            + chickenData.getTextureName());
                     IBakedModel baked = model.bake(state, format, (loc) -> bakedTextureGetter.apply(texLoc));
-                    models.put(name.toString(), baked);
+                    models.put(chickenData.getChickenType(), baked);
 
                 }
 
