@@ -3,6 +3,7 @@ package com.timwoodcreates.roost.render;
 import com.google.common.collect.ImmutableList;
 import com.setycz.chickens.registry.ChickensRegistry;
 import com.setycz.chickens.registry.ChickensRegistryItem;
+import com.timwoodcreates.roost.RoostTextures;
 import com.timwoodcreates.roost.data.DataChicken;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -35,6 +36,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -48,13 +50,20 @@ public class ModelItemChicken implements IModel {
     public static Collection<ResourceLocation> getItemTextures() {
         List<ResourceLocation> textures = DataChicken.getAllChickens().stream()
                 .map(DataChicken::getTextureName)
-                .filter(Objects::nonNull).map((item) ->
-                        new ResourceLocation("roost", "items/chicken/" + item))
+                .filter(Objects::nonNull).map(ModelItemChicken::getTextureLocation)
                 .collect(Collectors.toList());
-        textures.add(
-            new ResourceLocation("roost", "items/chicken/vanilla")
-        );
+
+        textures.add(getTextureLocation("vanilla"));
+
+        RoostTextures.stockTextures.stream()
+                .map(ModelItemChicken::getTextureLocation)
+                .forEach(textures::add);
+
         return textures;
+    }
+
+    private static ResourceLocation getTextureLocation(String tex) {
+        return new ResourceLocation("roost", "items/chicken/" + tex);
     }
 
     @SubscribeEvent
@@ -67,26 +76,34 @@ public class ModelItemChicken implements IModel {
     public static class BakedModelItemChicken implements IBakedModel {
         public Map<String, IBakedModel> models = new HashMap<>();
         public ChickenItemOverrideList overrides = new ChickenItemOverrideList();
+        public IModel chickenModel;
+        VertexFormat format;
+        IModelState state;
+
+        public final ResourceLocation placeholder = new ResourceLocation("roost", "items/chicken/vanilla");
 
         public BakedModelItemChicken(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+            this.state = state;
+            this.format = format;
+
             try {
-                IModel model = ModelLoaderRegistry.getModel(new ResourceLocation("roost:item/chicken/vanilla"));
-
-                for (DataChicken chickenData: DataChicken.getAllChickens()) {
-                    if(chickenData.getChickenType() == null) continue;
-
-                    ResourceLocation texLoc = new ResourceLocation("roost", "items/chicken/"
-                            + chickenData.getTextureName());
-                    IBakedModel baked = model.bake(state, format, (loc) -> bakedTextureGetter.apply(texLoc));
-                    models.put(chickenData.getChickenType(), baked);
-
-                }
-
-                IBakedModel baked = model.bake(state, format, bakedTextureGetter);
+                chickenModel = ModelLoaderRegistry.getModel(new ResourceLocation("roost:item/chicken/vanilla"));
+                IBakedModel baked = chickenModel.bake(state, format, bakedTextureGetter);
                 models.put("minecraft:vanilla", baked);
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+
+
+        public IBakedModel bakeChicken(String chickenName) {
+            DataChicken chickenData = DataChicken.getDataFromName(chickenName);
+            ResourceLocation texLoc = getTextureLocation(chickenData.getTextureName());
+
+            Function<ResourceLocation, TextureAtlasSprite> textureGetter;
+            textureGetter = location -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
+
+            return chickenModel.bake(this.state, this.format, (loc) -> textureGetter.apply(loc.equals(placeholder) ? texLoc: loc));
         }
 
         @Override
@@ -130,10 +147,10 @@ public class ModelItemChicken implements IModel {
                 DataChicken chickenData = DataChicken.getDataFromStack(stack);
                 if (chickenData != null) {
                     String name = chickenData.getChickenType();
-                    IBakedModel model = BakedModelItemChicken.this.models.getOrDefault(name, null);
+                    IBakedModel model = BakedModelItemChicken.this.models.computeIfAbsent(name, BakedModelItemChicken.this::bakeChicken);
                     if (model != null) return model;
                 }
-                return BakedModelItemChicken.this;
+                return originalModel;
             }
 
         }

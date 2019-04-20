@@ -1,12 +1,12 @@
 package com.timwoodcreates.roost.render;
 
 import com.google.common.collect.ImmutableList;
-import com.setycz.chickens.registry.ChickensRegistry;
-import com.setycz.chickens.registry.ChickensRegistryItem;
+import com.timwoodcreates.roost.RoostTextures;
 import com.timwoodcreates.roost.block.BlockRoost;
 import com.timwoodcreates.roost.data.DataChicken;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
@@ -34,18 +34,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class ModelBlockRoost implements IModel {
 
-    public IModel roost;
-    public IModel chicken;
+    public IModel roostModel;
+    public IModel chickenModel;
     public ModelBlockRoost() {
         try {
-            roost = ModelLoaderRegistry.getModel(new ResourceLocation("roost:block/roost_box"));
-            chicken = ModelLoaderRegistry.getModel(new ResourceLocation("roost:block/roost_chicken"));
+            roostModel = ModelLoaderRegistry.getModel(new ResourceLocation("roost:block/roost_box"));
+            chickenModel = ModelLoaderRegistry.getModel(new ResourceLocation("roost:block/roost_chicken"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -55,18 +56,28 @@ public class ModelBlockRoost implements IModel {
     @Override
     public Collection<ResourceLocation> getTextures() {
         List<ResourceLocation> textures = new ArrayList<>();
-        textures.addAll(roost.getTextures());
-        textures.addAll(chicken.getTextures());
+        textures.addAll(roostModel.getTextures());
+        textures.addAll(chickenModel.getTextures());
+
+        RoostTextures.stockTextures.stream()
+                .map(ModelBlockRoost::getTextureLocation)
+                .forEach(textures::add);
+
         return textures;
     }
 
     public static Collection<ResourceLocation> getChickenTextures() {
-        List<ResourceLocation> textures = DataChicken.getAllChickens().stream()
+        Set<ResourceLocation> textures = DataChicken.getAllChickens().stream()
                 .map(DataChicken::getTextureName)
-                .filter(Objects::nonNull).map((item) ->
-                    new ResourceLocation("roost", "blocks/chicken/" + item))
-                .collect(Collectors.toList());
+                .filter(Objects::nonNull)
+                .map(ModelBlockRoost::getTextureLocation)
+                .collect(Collectors.toSet());
+
         return textures;
+    }
+
+    private static ResourceLocation getTextureLocation(String tex) {
+        return new ResourceLocation("roost", "blocks/chicken/" + tex);
     }
 
     @SubscribeEvent
@@ -82,46 +93,42 @@ public class ModelBlockRoost implements IModel {
     }
 
     public class BakedModelBlockRoost implements IBakedModel {
-        public Map<String, IBakedModel> chickenModels = new HashMap<>();
-        public IBakedModel roostModel = null;
+        public Map<String, IBakedModel> chickenBakedModels = new HashMap<>();
+        public IBakedModel roostBakedModel = null;
         ItemOverrideList overrides = new ItemOverrideList(ImmutableList.of());
+        VertexFormat format;
+        IModelState state;
 
         public final ResourceLocation placeholder = new ResourceLocation("roost", "blocks/chicken/vanilla");
 
         public BakedModelBlockRoost(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-            try {
-                roostModel = roost.bake(state, format, bakedTextureGetter);
+            this.state = state;
+            this.format = format;
 
-                for (DataChicken chickenData: DataChicken.getAllChickens()) {
-                    if(chickenData.getChickenType() == null) continue;
+            roostBakedModel = roostModel.bake(state, format, bakedTextureGetter);
 
-                    ResourceLocation texLoc = new ResourceLocation("roost", "blocks/chicken/"
-                            /* + name.getResourceDomain() + "/" */
-                            + chickenData.getTextureName());
-                    IBakedModel baked = chicken.bake(state, format, (loc) -> {
-                        if (loc.equals(placeholder))
-                            return bakedTextureGetter.apply(texLoc);
-                        return bakedTextureGetter.apply(loc);
-                    });
-                    chickenModels.put(chickenData.getChickenType(), baked);
-
-                }
-
-                IBakedModel baked = chicken.bake(state, format, bakedTextureGetter);
-                chickenModels.put("minecraft:vanilla", baked);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            chickenBakedModels.put("minecraft:vanilla", chickenModel.bake(state, format, bakedTextureGetter));
         }
+
+        public IBakedModel bakeChicken(String chickenName) {
+            DataChicken chickenData = DataChicken.getDataFromName(chickenName);
+            ResourceLocation texLoc = getTextureLocation(chickenData.getTextureName());
+
+            Function<ResourceLocation, TextureAtlasSprite> textureGetter;
+            textureGetter = location -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
+
+            return chickenModel.bake(this.state, this.format, (loc) -> textureGetter.apply(loc.equals(placeholder) ? texLoc: loc));
+        }
+
         @Override
         public List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
             List<BakedQuad> quads = new ArrayList<>();
-            quads.addAll(roostModel.getQuads(state, side, rand));
+            quads.addAll(roostBakedModel.getQuads(state, side, rand));
 
             IExtendedBlockState extState = (IExtendedBlockState) state;
             String chickenName = extState.getValue(BlockRoost.CHICKEN);
             if (!chickenName.equals("roost:empty")) {
-                IBakedModel chicken = chickenModels.getOrDefault(chickenName, null);
+                IBakedModel chicken = chickenBakedModels.computeIfAbsent(chickenName, this::bakeChicken);
                 if (chicken != null) {
                     quads.addAll(chicken.getQuads(state, side, rand));
                 }
@@ -146,7 +153,7 @@ public class ModelBlockRoost implements IModel {
 
         @Override
         public TextureAtlasSprite getParticleTexture() {
-            return roostModel.getParticleTexture();
+            return roostBakedModel.getParticleTexture();
         }
 
         @Override

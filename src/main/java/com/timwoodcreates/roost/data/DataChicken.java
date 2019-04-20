@@ -66,6 +66,16 @@ public class DataChicken {
 		return data;
 	}
 
+	public static DataChicken getDataFromName(String name) {
+		DataChicken data = null;
+
+		if (Loader.isModLoaded("chickens")) data = DataChickenModded.getDataFromName(name);
+
+		if (data == null) data = DataChickenVanilla.getDataFromName(name);
+
+		return data;
+	}
+
 	public static void getItemChickenSubItems(CreativeTabs tab, List<ItemStack> subItems) {
 		for (DataChicken chicken : getAllChickens()) {
 			subItems.add(chicken.buildChickenStack());

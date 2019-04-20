@@ -37,6 +37,11 @@ public class DataChickenVanilla extends DataChicken {
 		return null;
 	}
 
+	public static DataChicken getDataFromName(String name) {
+		if (name.equals("minecraft:vanilla")) return new DataChickenVanilla();
+		return null;
+	}
+
 	public static void addAllChickens(List<DataChicken> chickens) {
 		chickens.add(new DataChickenVanilla());
 	}

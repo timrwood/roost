@@ -54,6 +54,13 @@ public class DataChickenModded extends DataChicken {
 		return null;
 	}
 
+	public static DataChicken getDataFromName(String name) {
+		ChickensRegistryItem chicken = ChickensRegistry.getByRegistryName(name);
+		if (chicken != null) return new DataChickenModded(chicken, null);
+
+		return null;
+	}
+
 	public static void addAllChickens(List<DataChicken> chickens) {
 		for (ChickensRegistryItem item : getChickenRegistryItems()) {
 			chickens.add(new DataChickenModded(item, null));
