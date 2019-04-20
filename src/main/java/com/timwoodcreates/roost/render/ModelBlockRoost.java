@@ -44,13 +44,8 @@ public class ModelBlockRoost implements IModel {
     public IModel roostModel;
     public IModel chickenModel;
     public ModelBlockRoost() {
-        try {
-            roostModel = ModelLoaderRegistry.getModel(new ResourceLocation("roost:block/roost_box"));
-            chickenModel = ModelLoaderRegistry.getModel(new ResourceLocation("roost:block/roost_chicken"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        roostModel = ModelLoaderRegistry.getModelOrMissing(new ResourceLocation("roost:block/roost_box"));
+        chickenModel = ModelLoaderRegistry.getModelOrMissing(new ResourceLocation("roost:block/roost_chicken"));
     }
 
     @Override

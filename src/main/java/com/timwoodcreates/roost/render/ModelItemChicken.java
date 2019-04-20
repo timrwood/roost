@@ -40,6 +40,8 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static net.minecraft.client.renderer.texture.TextureMap.LOCATION_MISSING_TEXTURE;
+
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class ModelItemChicken implements IModel {
     @Override
@@ -77,6 +79,7 @@ public class ModelItemChicken implements IModel {
         public Map<String, IBakedModel> models = new HashMap<>();
         public ChickenItemOverrideList overrides = new ChickenItemOverrideList();
         public IModel chickenModel;
+        public IBakedModel missingChickenBakedModel;
         VertexFormat format;
         IModelState state;
 
@@ -86,13 +89,12 @@ public class ModelItemChicken implements IModel {
             this.state = state;
             this.format = format;
 
-            try {
-                chickenModel = ModelLoaderRegistry.getModel(new ResourceLocation("roost:item/chicken/vanilla"));
-                IBakedModel baked = chickenModel.bake(state, format, bakedTextureGetter);
-                models.put("minecraft:vanilla", baked);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            chickenModel = ModelLoaderRegistry.getModelOrMissing(new ResourceLocation("roost:item/chicken/vanilla"));
+            IBakedModel baked = chickenModel.bake(state, format, bakedTextureGetter);
+            models.put("minecraft:vanilla", baked);
+
+            missingChickenBakedModel = chickenModel.bake(state, format, (loc) -> bakedTextureGetter.apply(LOCATION_MISSING_TEXTURE));
+
         }
 
 
@@ -150,7 +152,7 @@ public class ModelItemChicken implements IModel {
                     IBakedModel model = BakedModelItemChicken.this.models.computeIfAbsent(name, BakedModelItemChicken.this::bakeChicken);
                     if (model != null) return model;
                 }
-                return originalModel;
+                return missingChickenBakedModel;
             }
 
         }
