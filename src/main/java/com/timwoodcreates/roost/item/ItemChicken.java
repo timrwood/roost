@@ -15,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -47,7 +48,17 @@ public class ItemChicken extends Item {
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		DataChicken data = DataChicken.getDataFromStack(stack);
-		if (data != null) data.addInfoToTooltip(tooltip);
+		if (data != null) {
+			data.addInfoToTooltip(tooltip);
+		} else {
+			NBTTagCompound tag = stack.getTagCompound();
+			if (tag != null) {
+				String chicken = tag.getString(DataChicken.CHICKEN_ID_KEY);
+				if (chicken.length() > 0) {
+					tooltip.add("Broken chicken, id = \"" + chicken + "\"");
+				}
+			}
+		}
 	}
 
 	@Override
