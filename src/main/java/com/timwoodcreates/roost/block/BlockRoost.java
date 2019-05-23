@@ -1,9 +1,9 @@
 package com.timwoodcreates.roost.block;
 
+import com.google.common.base.Optional;
 import com.timwoodcreates.roost.Roost;
 import com.timwoodcreates.roost.RoostGui;
 import com.timwoodcreates.roost.data.DataChicken;
-import com.timwoodcreates.roost.data.EnumChickenType;
 import com.timwoodcreates.roost.tileentity.TileEntityRoost;
 
 import net.minecraft.block.BlockContainer;
@@ -12,6 +12,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.properties.PropertyHelper;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -28,14 +29,46 @@ import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Collection;
+
 public class BlockRoost extends BlockContainer {
 
+	public static class PropertyChickenType implements IUnlistedProperty<String> {
+
+		private final String name;
+
+		public PropertyChickenType(String name) {
+			this.name = name;
+		}
+
+		@Override
+		public String getName() {
+			return name;
+		}
+
+		@Override
+		public boolean isValid(String value) {
+			return true; // xxx
+		}
+
+		@Override
+		public Class<String> getType() {
+			return String.class;
+		}
+
+		@Override
+		public String valueToString(String value) {
+			return value;
+		}
+	}
+
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
-	public static final PropertyEnum<EnumChickenType> CHICKEN = PropertyEnum.<EnumChickenType>create("chicken",
-			EnumChickenType.class);
+	public static final PropertyChickenType CHICKEN = new PropertyChickenType("chicken");
 
 	public BlockRoost() {
 		super(Material.WOOD);
@@ -43,13 +76,12 @@ public class BlockRoost extends BlockContainer {
 		setHardness(2.0F);
 		setResistance(5.0F);
 		setSoundType(SoundType.WOOD);
-		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(CHICKEN,
-				EnumChickenType.EMPTY));
+		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 	}
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, FACING, CHICKEN);
+		return new BlockStateContainer.Builder(this).add(FACING).add(CHICKEN).build();
 	}
 
 	@Override
@@ -122,19 +154,19 @@ public class BlockRoost extends BlockContainer {
 	}
 
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-		EnumChickenType chickenType = EnumChickenType.EMPTY;
-		TileEntity tileEntity = worldIn instanceof ChunkCache
-				? ((ChunkCache) worldIn).getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK)
-				: worldIn.getTileEntity(pos);
+	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		String chickenType = "roost:empty";
+		TileEntity tileEntity = world instanceof ChunkCache
+				? ((ChunkCache) world).getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK)
+				: world.getTileEntity(pos);
 
 		if (tileEntity instanceof TileEntityRoost) {
 			DataChicken chickenData = ((TileEntityRoost) tileEntity).createChickenData();
-			if (chickenData != null) chickenType = EnumChickenType.get(chickenData.getName());
+			if (chickenData != null) chickenType = chickenData.getChickenType();
 		}
 
-		if (chickenType == null) chickenType = EnumChickenType.UNKNOWN;
+		if (chickenType == null) chickenType = "minecraft:vanilla";
 
-		return state.withProperty(CHICKEN, chickenType);
+		return ((IExtendedBlockState)state).withProperty(CHICKEN, chickenType);
 	}
 }

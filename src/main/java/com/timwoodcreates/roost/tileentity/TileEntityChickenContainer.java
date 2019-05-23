@@ -87,6 +87,7 @@ public abstract class TileEntityChickenContainer extends TileEntity implements I
 			chickenData[slot] = newChicken;
 			if (!skipNextTimerReset) resetTimer();
 		}
+		if (wasChanged) notifyBlockUpdate();
 	}
 
 	protected DataChicken getChickenData(int slot) {

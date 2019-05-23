@@ -1,0 +1,84 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "display": {
+    "firstperson_righthand": {
+      "rotation": [0, 135, 0],
+      "translation": [0, 0, 0],
+      "scale": [0.4, 0.4, 0.4]
+    }
+  },
+  "textures": {
+    "chicken": "roost:blocks/chicken/vanilla"
+  },
+  "elements": [
+    {
+      "name": "Head",
+      "from": [6, 6, 2],
+      "to": [10, 12, 5],
+      "faces": {
+        "north": { "texture": "#chicken", "uv": [2, 7, 6, 13] },
+        "east": { "texture": "#chicken", "uv": [10, 0, 7, 6] },
+        "west": { "texture": "#chicken", "uv": [7, 0, 10, 6] },
+        "up": { "texture": "#chicken", "uv": [0, 3, 4, 0] },
+        "down": { "texture": "#chicken", "uv": [0, 3, 4, 0] }
+      }
+    },
+    {
+      "name": "Bill",
+      "from": [6, 8, 0],
+      "to": [10, 10, 2],
+      "faces": {
+        "north": { "texture": "#chicken", "uv": [2, 9, 6, 11] },
+        "east": { "texture": "#chicken", "uv": [5, 2, 7, 4] },
+        "west": { "texture": "#chicken", "uv": [7, 2, 5, 4] },
+        "up": { "texture": "#chicken", "uv": [0, 5, 4, 3] },
+        "down": { "texture": "#chicken", "uv": [0, 5, 4, 3] }
+      }
+    },
+    {
+      "name": "Chin",
+      "from": [7, 6, 1],
+      "to": [9, 8, 2],
+      "faces": {
+        "north": { "texture": "#chicken", "uv": [3, 11, 5, 13] },
+        "east": { "texture": "#chicken", "uv": [6, 4, 7, 6] },
+        "west": { "texture": "#chicken", "uv": [6, 4, 7, 6] },
+        "down": { "texture": "#chicken", "uv": [5, 12, 3, 13] }
+      }
+    },
+    {
+      "name": "Body",
+      "from": [5, 3, 4],
+      "to": [11, 8, 11],
+      "faces": {
+        "north": { "texture": "#chicken", "uv": [1, 11, 7, 16] },
+        "east": { "texture": "#chicken", "uv": [16, 4, 9, 9] },
+        "west": { "texture": "#chicken", "uv": [9, 4, 16, 9] },
+        "up": { "texture": "#chicken", "uv": [9, 9, 15, 16] }
+      }
+    },
+    {
+      "name": "Wing Left",
+      "from": [4, 4, 5],
+      "to": [5, 8, 11],
+      "faces": {
+        "north": { "texture": "#chicken", "uv": [7, 11, 8, 15] },
+        "west": { "texture": "#chicken", "uv": [10, 0, 16, 4] },
+        "up": { "texture": "#chicken", "uv": [8, 10, 9, 16] },
+        "down": { "texture": "#chicken", "uv": [8, 10, 9, 16] }
+      }
+    },
+    {
+      "name": "Wing Right",
+      "from": [11, 4, 5],
+      "to": [12, 8, 11],
+      "faces": {
+        "north": { "texture": "#chicken", "uv": [7, 11, 8, 15] },
+        "east": { "texture": "#chicken", "uv": [10, 0, 16, 4] },
+        "up": { "texture": "#chicken", "uv": [8, 10, 9, 16] },
+        "down": { "texture": "#chicken", "uv": [8, 10, 9, 16] }
+      }
+    }
+  ]
+}
