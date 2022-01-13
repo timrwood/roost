@@ -1,0 +1,30 @@
+tile.roost.breeder.name=Куриный Сводчик
+tile.roost.collector.name=Сборщик Курятника
+tile.roost.roost.name=Курятник
+
+container.roost.breeder=Куриный Сводчик
+container.roost.breeder.seedless=Нет семян
+container.roost.collector=Сборщик Курятника
+container.roost.roost=Курятник
+container.roost.progress=Progress: %s
+
+gui.jei.roost.category.breeding=Сведение Куриц
+gui.jei.roost.category.catching=Ловля Куриц
+gui.jei.roost.category.roosting=Насест Куриц
+
+item.roost.catcher.name=Ловец Куриц
+item.roost.chicken.strength=Сила: %s
+item.roost.chicken.gain=Сбор: %s
+item.roost.chicken.growth=Рост: %s
+item.roost.chicken.parent1=Выведен от %s
+item.roost.chicken.parent2=и %s
+item.roost.chicken.spawning.hell=Найдено в незере
+item.roost.chicken.spawning.normal=Найдено в обычном мире
+item.roost.chicken.spawning.snow=Найдено в снежных биомах
+
+itemGroup.roost=Roost
+
+config.roost.breederSpeed.tooltip=Множитель скорости для сводчика. Больше = быстрее.
+config.roost.breederSpeed=Скорость сводчика
+config.roost.roostSpeed.tooltip=Множитель скорости для курятника. Больше = быстрее.
+config.roost.roostSpeed=Скорость курятника
