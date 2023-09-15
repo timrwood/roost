@@ -1,8 +1,8 @@
-tile.roost.breeder.name=Criador de Frangos
+tile.roost.breeder.name=Criador de Galinhas
 tile.roost.collector.name=Coletor de Poleiro
 tile.roost.roost.name=Poleiro
 
-container.roost.breeder=Criador de Frangos
+container.roost.breeder=Criador de Galinhas
 container.roost.breeder.seedless=Sem Sementes
 container.roost.collector=Coletor de Poleiro
 container.roost.roost=Poleiro
@@ -12,7 +12,7 @@ gui.jei.roost.category.breeding=Criação de Galinhas
 gui.jei.roost.category.catching=Pegando Galinhas
 gui.jei.roost.category.roosting=Galinhas Empoleiradas
 
-item.roost.catcher.name=Pegador de Frango
+item.roost.catcher.name=Pegador de Galinhas
 item.roost.chicken.strength=Força: %s
 item.roost.chicken.gain=Ganho: %s
 item.roost.chicken.growth=Crescimento: %s
