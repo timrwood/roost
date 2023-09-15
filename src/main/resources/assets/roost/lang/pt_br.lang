@@ -6,7 +6,7 @@ container.roost.breeder=Criador de Frangos
 container.roost.breeder.seedless=Sem Sementes
 container.roost.collector=Coletor de Poleiro
 container.roost.roost=Poleiro
-container.roost.progress=Progress: %s
+container.roost.progress=Progresso: %s
 
 gui.jei.roost.category.breeding=Criação de Galinhas
 gui.jei.roost.category.catching=Pegando Galinhas
