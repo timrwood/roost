@@ -25,6 +25,6 @@ item.roost.chicken.spawning.snow=Encontrado em biomas nevados
 itemGroup.roost=Poleiro
 
 config.roost.breederSpeed.tooltip=O multiplicador de velocidade para o criador. Quanto mais alto é mais rápido.
-config.roost.breederSpeed=Velocidade do criador
+config.roost.breederSpeed=Velocidade do Criador
 config.roost.roostSpeed.tooltip=O multiplicador de velocidade para o poleiro. Quanto mais alto é mais rápido.
-config.roost.roostSpeed=Velocidade do poleiro
+config.roost.roostSpeed=Velocidade do Poleiro
