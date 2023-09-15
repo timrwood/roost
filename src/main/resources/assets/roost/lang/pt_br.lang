@@ -27,4 +27,4 @@ itemGroup.roost=Poleiro
 config.roost.breederSpeed.tooltip=O multiplicador de velocidade para o criador. Quanto mais alto é mais rápido.
 config.roost.breederSpeed=Velocidade do criador
 config.roost.roostSpeed.tooltip=O multiplicador de velocidade para o poleiro. Quanto mais alto é mais rápido.
-config.roost.roostSpeed=Velocidade de poleiro
+config.roost.roostSpeed=Velocidade do poleiro
