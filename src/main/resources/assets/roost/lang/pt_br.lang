@@ -1,0 +1,30 @@
+tile.roost.breeder.name=Criador de Frangos
+tile.roost.collector.name=Coletor de Poleiro
+tile.roost.roost.name=Poleiro
+
+container.roost.breeder=Criador de Frangos
+container.roost.breeder.seedless=Sem Sementes
+container.roost.collector=Coletor de Poleiro
+container.roost.roost=Poleiro
+container.roost.progress=Progress: %s
+
+gui.jei.roost.category.breeding=Criação de Galinhas
+gui.jei.roost.category.catching=Pegando Galinhas
+gui.jei.roost.category.roosting=Galinhas Empoleiradas
+
+item.roost.catcher.name=Pegador de Frango
+item.roost.chicken.strength=Força: %s
+item.roost.chicken.gain=Ganho: %s
+item.roost.chicken.growth=Crescimento: %s
+item.roost.chicken.parent1=Criado de %s
+item.roost.chicken.parent2=e %s
+item.roost.chicken.spawning.hell=Encontrado no nether
+item.roost.chicken.spawning.normal=Encontrado no mundo normal
+item.roost.chicken.spawning.snow=Encontrado em biomas nevados
+
+itemGroup.roost=Poleiro
+
+config.roost.breederSpeed.tooltip=O multiplicador de velocidade para o criador. Quanto mais alto é mais rápido.
+config.roost.breederSpeed=Velocidade do criador
+config.roost.roostSpeed.tooltip=O multiplicador de velocidade para o poleiro. Quanto mais alto é mais rápido.
+config.roost.roostSpeed=Velocidade de poleiro
